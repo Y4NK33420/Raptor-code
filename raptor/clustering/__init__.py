@@ -3,11 +3,27 @@
 from ..config import ClusteringConfig
 from .base import CLUSTERERS, ClusteringAlgorithm, check_clusters
 from .raptor_gmm import RaptorGMMClustering
+from .strategies import (
+    AgglomerativeClustering,
+    ContiguousClustering,
+    GMMClustering,
+    HDBSCANClustering,
+    KMeansSilhouetteClustering,
+    PCAGMMClustering,
+    TokenLimitedClustering,
+)
 
 __all__ = [
     "CLUSTERERS",
+    "AgglomerativeClustering",
     "ClusteringAlgorithm",
+    "ContiguousClustering",
+    "GMMClustering",
+    "HDBSCANClustering",
+    "KMeansSilhouetteClustering",
+    "PCAGMMClustering",
     "RaptorGMMClustering",
+    "TokenLimitedClustering",
     "check_clusters",
     "make_clusterer",
 ]

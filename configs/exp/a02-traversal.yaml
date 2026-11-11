@@ -1,0 +1,8 @@
+name: A-traversal
+description: Top-down tree traversal (top-10 per layer) instead of the collapsed tree.
+stage: A
+factor: retrieval
+baseline: A-baseline
+raptor:
+  retrieval:
+    mode: traversal

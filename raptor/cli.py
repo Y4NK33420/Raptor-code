@@ -117,8 +117,12 @@ def migrate(
 
 
 from .code.cli import code_app  # noqa: E402
+from .eval.cli import app as eval_app  # noqa: E402
 
 app.add_typer(code_app, name="code")
+app.add_typer(
+    eval_app, name="eval", help="QuALITY experiment harness (run, report, compare, list)."
+)
 
 if __name__ == "__main__":  # pragma: no cover
     app()

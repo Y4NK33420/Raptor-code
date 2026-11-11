@@ -1,0 +1,10 @@
+name: A-clu-agglomerative
+description: Average-linkage cosine clustering, about 6 nodes per cluster. Local bge-small
+  embeddings (vs the A-emb-bge-small baseline).
+stage: A
+factor: clustering
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  clustering:
+    strategy: agglomerative

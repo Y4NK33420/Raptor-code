@@ -1,0 +1,54 @@
+{
+  "run_id": "a-chunk-fixed-overlap-5116e385",
+  "name": "A-chunk-fixed-overlap",
+  "description": "Fixed 100-token windows with 20-token overlap. Local bge-small embeddings.",
+  "stage": "A",
+  "factor": "chunking",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T16:18:42+00:00",
+  "finished_at": "2026-11-11T16:30:59.800000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "dc3183695db3",
+  "tree_fingerprint": "6dfa21feaf98",
+  "factors": {
+    "chunking": "fixed-100-ov20",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.75,
+  "accuracy_hard": 0.7096774194,
+  "n_hard": 31,
+  "ci95": [
+    0.64223,
+    0.833712
+  ],
+  "layer_share": {
+    "0": 0.743,
+    "1": 0.244,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1074.21,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 46.2,
+  "query_seconds_mean": 9.1,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 67.8,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

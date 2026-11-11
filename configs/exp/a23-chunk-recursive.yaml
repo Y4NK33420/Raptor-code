@@ -1,0 +1,11 @@
+name: A-chunk-recursive
+description: LangChain-style recursive splitting, 100 tokens. Local bge-small embeddings
+  (vs the A-emb-bge-small baseline).
+stage: A
+factor: chunking
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  chunking:
+    strategy: recursive
+    max_tokens: 100

@@ -15,18 +15,24 @@ class RateLimiter:
         self._times: deque[float] = deque()
         self._lock = threading.Lock()
 
-    def try_acquire(self) -> float:
-        """Take a slot if one is free. Returns 0.0 on success, else seconds until one frees up."""
+    def try_acquire(self, cost: int = 1) -> float:
+        """Take ``cost`` slots if free. Returns 0.0 on success, else seconds until they free up.
+
+        A cost above ``rpm`` is clamped to ``rpm`` (it waits for an empty window).
+        """
         if self.rpm is None:
             return 0.0
+        cost = max(1, min(cost, self.rpm))
         with self._lock:
             now = time.monotonic()
             while self._times and now - self._times[0] >= 60.0:
                 self._times.popleft()
-            if len(self._times) < self.rpm:
-                self._times.append(now)
+            if len(self._times) + cost <= self.rpm:
+                self._times.extend([now] * cost)
                 return 0.0
-            return max(60.0 - (now - self._times[0]), 0.01)
+            # The entry that must expire before ``cost`` slots are free.
+            blocker = self._times[len(self._times) + cost - self.rpm - 1]
+            return max(60.0 - (now - blocker), 0.01)
 
     def acquire(self) -> None:
         while (wait := self.try_acquire()) > 0:

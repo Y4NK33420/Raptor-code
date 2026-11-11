@@ -1,0 +1,9 @@
+name: A-rerank
+description: Dense top-50 candidates re-scored by the local BAAI/bge-reranker-base
+  cross-encoder.
+stage: A
+factor: retrieval
+baseline: A-baseline
+raptor:
+  retrieval:
+    reranker: BAAI/bge-reranker-base

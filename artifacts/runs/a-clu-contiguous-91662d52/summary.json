@@ -1,0 +1,54 @@
+{
+  "run_id": "a-clu-contiguous-91662d52",
+  "name": "A-clu-contiguous",
+  "description": "Contiguous segmentation: runs of about 5 adjacent nodes. Local bge-small.",
+  "stage": "A",
+  "factor": "clustering",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T15:23:47+00:00",
+  "finished_at": "2026-11-11T15:35:14.800000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "83febc978d5d",
+  "tree_fingerprint": "593ff169fe31",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "contiguous",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7236842105,
+  "accuracy_hard": 0.6451612903,
+  "n_hard": 31,
+  "ci95": [
+    0.614244,
+    0.811599
+  ],
+  "layer_share": {
+    "0": 0.763,
+    "1": 0.224,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1050.7,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 41.8,
+  "query_seconds_mean": 8.5,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 62.3,
+    "mean_branching": 5.0,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

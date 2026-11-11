@@ -29,11 +29,27 @@ RATE_LIMIT_COOLDOWN = 60.0
 DAILY_QUOTA_COOLDOWN = 3600.0
 MAX_ATTEMPTS = 8
 
+#: When True, a call raises :class:`QuotaExhaustedError` once every key has hit a per-day
+#: quota for the model, instead of waiting out the cooldown. Batch jobs (the eval runner)
+#: turn this on so they stop cleanly rather than stall for an hour.
+FAIL_ON_DAILY_QUOTA = False
+
+
+class QuotaExhaustedError(RuntimeError):
+    """Every configured key has used up its daily quota for a model."""
+
 
 def is_rate_limit(exc: BaseException) -> bool:
     code = getattr(exc, "code", None)
     text = str(exc).lower()
     return code == 429 or "resource_exhausted" in text or "429" in text
+
+
+def is_auth_error(exc: BaseException) -> bool:
+    """The key itself is bad (invalid, revoked, or not allowed to use the API)."""
+    code = getattr(exc, "code", None)
+    text = str(exc).lower()
+    return code in (401, 403) or "api key not valid" in text or "api_key_invalid" in text
 
 
 def is_retryable(exc: BaseException) -> bool:
@@ -57,6 +73,7 @@ class KeySlot:
     client: Any
     limiters: dict[str, RateLimiter] = field(default_factory=dict)
     cooldown_until: dict[str, float] = field(default_factory=dict)
+    disabled: bool = False  # set when the key is rejected as invalid
 
 
 class KeyPool:
@@ -77,7 +94,7 @@ class KeyPool:
             lim = slot.limiters[bucket] = RateLimiter(rpm)
         return lim
 
-    def acquire(self, bucket: str, rpm: int | None) -> KeySlot:
+    def acquire(self, bucket: str, rpm: int | None, cost: int = 1) -> KeySlot:
         """Block until some key has budget for ``bucket``; return that key's slot."""
         while True:
             with self._lock:
@@ -86,30 +103,55 @@ class KeyPool:
                 n = len(self.slots)
                 for step in range(n):
                     slot = self.slots[(self._cursor + step) % n]
+                    if slot.disabled:
+                        continue
                     cool = slot.cooldown_until.get(bucket, 0.0) - now
                     if cool > 0:
                         waits.append(cool)
                         continue
-                    wait = self._limiter(slot, bucket, rpm).try_acquire()
+                    wait = self._limiter(slot, bucket, rpm).try_acquire(cost)
                     if wait == 0.0:
                         self._cursor = (slot.index + 1) % n
                         self.calls_per_key[slot.index] += 1
                         return slot
                     waits.append(wait)
+                if not waits:
+                    raise RuntimeError("every Gemini API key was rejected as invalid")
             time.sleep(max(min(waits), 0.01))
 
     def cooldown(self, slot: KeySlot, bucket: str, seconds: float) -> None:
         with self._lock:
             slot.cooldown_until[bucket] = time.monotonic() + seconds
 
-    def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T]) -> T:
-        """Run ``fn(client)`` on an available key, failing over and retrying as needed."""
+    def _all_daily_exhausted(self, bucket: str) -> bool:
+        now = time.monotonic()
+        with self._lock:
+            return all(
+                s.disabled or s.cooldown_until.get(bucket, 0.0) - now > RATE_LIMIT_COOLDOWN
+                for s in self.slots
+            )
+
+    def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T], *, cost: int = 1) -> T:
+        """Run ``fn(client)`` on an available key, failing over and retrying as needed.
+
+        ``cost`` is how many requests the call counts as against ``rpm`` (Gemini's free
+        tier counts every text in a batch embedding call as one request).
+        """
         attempts = MAX_ATTEMPTS + len(self.slots)
         for attempt in range(attempts):
-            slot = self.acquire(bucket, rpm)
+            slot = self.acquire(bucket, rpm, cost)
             try:
                 return fn(slot.client)
             except Exception as exc:
+                if is_auth_error(exc) and any(not s.disabled for s in self.slots if s is not slot):
+                    logger.warning(
+                        "Gemini key #%d was rejected (%s); disabling it for this process",
+                        slot.index + 1,
+                        str(exc)[:80],
+                    )
+                    with self._lock:
+                        slot.disabled = True
+                    continue
                 if not is_retryable(exc) or attempt == attempts - 1:
                     raise
                 if is_rate_limit(exc):
@@ -122,6 +164,10 @@ class KeyPool:
                         " (trying next key)" if len(self.slots) > 1 else "",
                     )
                     self.cooldown(slot, bucket, seconds)
+                    if FAIL_ON_DAILY_QUOTA and self._all_daily_exhausted(bucket):
+                        raise QuotaExhaustedError(
+                            f"daily quota used up on every key for {bucket}"
+                        ) from exc
                 else:
                     delay = min(60.0, 2.0 * 2**attempt) * random.uniform(0.5, 1.0)
                     logger.warning("Gemini call failed (%s); retrying in %.1fs", exc, delay)

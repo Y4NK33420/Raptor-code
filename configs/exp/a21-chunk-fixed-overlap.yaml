@@ -1,0 +1,12 @@
+name: A-chunk-fixed-overlap
+description: Fixed 100-token windows with 20-token overlap. Local bge-small embeddings
+  (vs the A-emb-bge-small baseline).
+stage: A
+factor: chunking
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  chunking:
+    strategy: fixed_tokens
+    max_tokens: 100
+    overlap_tokens: 20

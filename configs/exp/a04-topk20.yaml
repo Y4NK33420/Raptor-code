@@ -1,0 +1,7 @@
+name: A-topk20
+description: Collapsed tree, top-20 nodes (still within 3500 tokens).
+stage: A
+factor: retrieval
+baseline: A-baseline
+top_k: 20
+raptor: {}

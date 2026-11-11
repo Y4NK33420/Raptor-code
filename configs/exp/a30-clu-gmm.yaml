@@ -1,0 +1,10 @@
+name: A-clu-gmm
+description: GMM on the raw embeddings (spherical covariance, BIC), no reduction.
+  Local bge-small embeddings (vs the A-emb-bge-small baseline).
+stage: A
+factor: clustering
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  clustering:
+    strategy: gmm

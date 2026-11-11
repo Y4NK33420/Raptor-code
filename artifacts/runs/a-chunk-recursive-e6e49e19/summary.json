@@ -1,0 +1,54 @@
+{
+  "run_id": "a-chunk-recursive-e6e49e19",
+  "name": "A-chunk-recursive",
+  "description": "LangChain-style recursive splitting, 100 tokens. Local bge-small embeddings.",
+  "stage": "A",
+  "factor": "chunking",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T16:45:25+00:00",
+  "finished_at": "2026-11-11T16:57:58.700000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "51a8373e4eb0",
+  "tree_fingerprint": "a04684765a36",
+  "factors": {
+    "chunking": "recursive-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7631578947,
+  "accuracy_hard": 0.7096774194,
+  "n_hard": 31,
+  "ci95": [
+    0.656384,
+    0.844608
+  ],
+  "layer_share": {
+    "0": 0.735,
+    "1": 0.252,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1058.36,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 46.9,
+  "query_seconds_mean": 9.3,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 66.1,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

@@ -1,0 +1,11 @@
+name: B-traversal-semantic
+description: "Traversal retrieval with semantic chunking (gemini-embedding-001)."
+stage: B
+factor: combined
+baseline: A-baseline
+raptor:
+  retrieval:
+    mode: traversal
+  chunking:
+    strategy: semantic
+    max_tokens: 100

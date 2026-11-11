@@ -1,0 +1,11 @@
+name: A-chunk-paragraph
+description: Whole paragraphs packed up to 100 tokens. Local bge-small embeddings
+  (vs the A-emb-bge-small baseline).
+stage: A
+factor: chunking
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  chunking:
+    strategy: paragraph
+    max_tokens: 100

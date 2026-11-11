@@ -1,0 +1,7 @@
+name: A-flat
+description: 'Flat RAG baseline: the same leaf chunks, dense top-10, no summary layers.'
+stage: A
+factor: method
+baseline: A-baseline
+method: flat
+raptor: {}

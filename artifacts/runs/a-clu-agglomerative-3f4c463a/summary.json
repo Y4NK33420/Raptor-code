@@ -1,0 +1,54 @@
+{
+  "run_id": "a-clu-agglomerative-3f4c463a",
+  "name": "A-clu-agglomerative",
+  "description": "Average-linkage cosine clustering, about 6 nodes per cluster. Local bge-small.",
+  "stage": "A",
+  "factor": "clustering",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T16:00:27+00:00",
+  "finished_at": "2026-11-11T16:12:27.500000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "04f0a84bf7a7",
+  "tree_fingerprint": "4e02744219e5",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "agglomerative",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.75,
+  "accuracy_hard": 0.6774193548,
+  "n_hard": 31,
+  "ci95": [
+    0.64223,
+    0.833712
+  ],
+  "layer_share": {
+    "0": 0.743,
+    "1": 0.244,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1052.64,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 44.1,
+  "query_seconds_mean": 8.9,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 64.5,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

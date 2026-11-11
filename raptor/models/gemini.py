@@ -85,10 +85,11 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
         self.document_task_type = document_task_type
         self.query_task_type = query_task_type
         self.output_dimensionality = output_dimensionality
-        self.batch_size = max(1, min(batch_size, EMBED_BATCH_LIMIT))
         self._pool = _pool(api_key)
         self._bucket = f"embed:{self.model_name}"
         self._rpm = rpm if rpm is not None else get_settings().gemini_embed_rpm
+        # Every text counts against the per-minute quota, so a batch never exceeds it.
+        self.batch_size = max(1, min(batch_size, EMBED_BATCH_LIMIT, self._rpm or EMBED_BATCH_LIMIT))
         self.model_id = (
             f"gemini:{self.model_name}:doc={document_task_type}:q={query_task_type}"
             f":dim={output_dimensionality}"
@@ -102,12 +103,24 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
         )
 
     def _embed_batch(self, texts: list[str], task_type: str | None) -> list[list[float]]:
+        from google.genai import types
+
         config = self._config(task_type)
+        # One Content per text: newer models (gemini-embedding-2) would otherwise merge a list
+        # of strings into a single multi-part input and return one vector.
+        contents = [types.Content(parts=[types.Part(text=t)]) for t in texts]
         resp = self._pool.call(
             self._bucket,
             self._rpm,
-            lambda c: c.models.embed_content(model=self.model_name, contents=texts, config=config),
+            lambda c: c.models.embed_content(
+                model=self.model_name, contents=contents, config=config
+            ),
+            cost=len(texts),
         )
+        if len(resp.embeddings) != len(texts):
+            raise RuntimeError(
+                f"{self.model_name} returned {len(resp.embeddings)} embeddings for {len(texts)} texts"
+            )
         return [list(e.values) for e in resp.embeddings]
 
     def _embed(self, texts: Sequence[str], task_type: str | None) -> np.ndarray:
@@ -140,6 +153,18 @@ class _GeminiLLM:
             self._rpm,
             lambda c: c.models.generate_content(model=self.model_name, contents=prompt, config=cfg),
         )
+
+    def generate_json(
+        self, prompt: str, schema: dict[str, Any], *, temperature: float = 0.0
+    ) -> str | None:
+        """Generate a JSON reply that follows ``schema``. Returns the raw text (``None`` if filtered)."""
+        resp = self._generate(
+            prompt,
+            temperature=temperature,
+            response_mime_type="application/json",
+            response_schema=schema,
+        )
+        return self._text(resp)
 
     @staticmethod
     def _text(resp: Any) -> str | None:

@@ -39,7 +39,7 @@ class TreeBuilder:
         self.config = config
         self.embedding_model = embedding_model
         self.summarization_model = summarization_model
-        self.chunker = chunker or make_chunker(config.chunking)
+        self.chunker = chunker or make_chunker(config.chunking, embedding_model)
         self.clusterer = clusterer or make_clusterer(config.clustering)
         self.tokenizer = tokenizer or default_tokenizer()
 

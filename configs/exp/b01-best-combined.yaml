@@ -1,0 +1,10 @@
+name: B-best-combined
+description: "Best Stage-A settings combined: traversal + top-20 + gemini-embedding-2."
+stage: B
+factor: combined
+baseline: A-baseline
+embedding: gemini:gemini-embedding-2
+raptor:
+  retrieval:
+    mode: traversal
+    top_k: 20
