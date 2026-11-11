@@ -116,5 +116,9 @@ def migrate(
     typer.echo(f"Converted {pickle_file} ({len(tree.all_nodes)} nodes) -> {out}")
 
 
+from .code.cli import code_app  # noqa: E402
+
+app.add_typer(code_app, name="code")
+
 if __name__ == "__main__":  # pragma: no cover
     app()
