@@ -151,12 +151,12 @@ export function ArenaPanel({
                   key={i}
                   className={cn(
                     'flex gap-2 rounded-lg border px-3 py-1.5 text-sm',
-                    gold === i ? 'border-good/50 bg-good/10 text-ink' : 'border-line text-ink-2',
+                    gold === i + 1 ? 'border-good/50 bg-good/10 text-ink' : 'border-line text-ink-2',
                   )}
                 >
                   <span className="num text-muted">{i + 1}</span>
                   <span>{o}</span>
-                  {gold === i && (
+                  {gold === i + 1 && (
                     <Badge tone="good" className="ml-auto self-start">
                       gold
                     </Badge>

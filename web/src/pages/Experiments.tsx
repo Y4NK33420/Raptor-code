@@ -183,7 +183,7 @@ function Effects({ runs, baseline, onPick }: { runs: RunSummary[]; baseline: Run
 const STATUS_TONE = { fixed: 'good', broken: 'critical', both_right: 'neutral', both_wrong: 'neutral' } as const
 
 function QuestionRow({ q }: { q: CompareQuestion }) {
-  const label = (p: number | null | undefined) => (p === null || p === undefined ? '—' : `${p + 1}`)
+  const label = (p: number | null | undefined) => (p === null || p === undefined ? '—' : `${p}`)
   return (
     <li className="space-y-1 border-b border-line px-4 py-3 last:border-0">
       <div className="flex items-start justify-between gap-3">
@@ -197,7 +197,7 @@ function QuestionRow({ q }: { q: CompareQuestion }) {
         {q.difficult && ' · hard'}
       </p>
       {q.options && q.gold !== null && q.gold !== undefined && (
-        <p className="text-xs text-ink-2">Answer: {q.options[q.gold]}</p>
+        <p className="text-xs text-ink-2">Answer: {q.options[q.gold - 1]}</p>
       )}
       {q.b_rationale && <p className="text-xs text-muted italic">“{q.b_rationale}”</p>}
     </li>
