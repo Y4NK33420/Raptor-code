@@ -116,5 +116,7 @@ def migrate(
     typer.echo(f"Converted {pickle_file} ({len(tree.all_nodes)} nodes) -> {out}")
 
 
+app.command("serve")(__import__("raptor.server.cli", fromlist=["serve"]).serve)
+
 if __name__ == "__main__":  # pragma: no cover
     app()
