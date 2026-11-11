@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "corpus": "Cinderella Fairytale (2,642 words)",
+    "category": "Holistic / Thematic",
+    "question": "What is the central theme and moral of the story of Cinderella?",
+    "eval_criteria": "Requires understanding entire arc: humility/piety rewarded, cruelty punished, transformation.",
+    "top_k": 4,
+    "flat_rag": {
+      "answer": "Based strictly and only on the provided context, the text does not state or explain the central theme and moral of the story of Cinderella. \n\nFurthermore, the provided context is fragmented and incomplete, consisting of isolated excerpts rather than the whole picture. Specifically, the following key parts of the story and journey are missing from the retrieved context:\n* The beginning of the story (such as Cinderella's background, her father, or the death of her real mother before she is reduced to sleeping in the cinders).\n* The details of Cinderella's interactions at the king's palace/wedding before she dances with the king's son and receives the golden shoe.\n* The events following the king's son recognizing her, other than him taking her on his horse, passing the hazel-tree where the white doves cry, and the step-mother and sisters being horrified.\n* The final resolution, conclusion, or any explicit statement regarding a moral lesson.",
+      "is_incomplete": true,
+      "chunks_retrieved": 4
+    },
+    "raptor": {
+      "answer": "Based **strictly and only** on the provided context, the text describes various events, actions, and plot points of the Cinderella story (such as her mistreatment, the tasks, the magical help from birds, the festival/ball, the slipper test, and the punishment of the stepsisters), but **it does not explicitly state or summarize a \"central theme and moral\"** of the story. \n\nFurthermore, because the provided context is a fragmented and pieced-together compilation of different versions of the tale (mentioning grey bedgowns, a hazel twig on a mother's grave, a three-day festival, a pitch-smeared staircase, and pigeons blinding the stepsisters), the retrieved context lacks a cohesive, complete narrative flow and does not explicitly declare any overarching moral lesson.",
+      "is_comprehensive": true,
+      "nodes_retrieved": [
+        24,
+        26,
+        25,
+        23
+      ],
+      "leaf_nodes_count": 0,
+      "summary_nodes_count": 4,
+      "summary_percentage": 100.0
+    }
+  },
+  {
+    "id": 2,
+    "corpus": "Cinderella Fairytale (2,642 words)",
+    "category": "Multi-Hop Narrative Arc",
+    "question": "How did Cinderella find a happy ending throughout her whole journey from her mother's death to the royal marriage?",
+    "eval_criteria": "Requires multi-hop synthesis: mother's death -> tree/wishes -> festival -> slipper test -> wedding.",
+    "top_k": 4,
+    "flat_rag": {
+      "answer": "Based strictly and only on the provided context, here is how Cinderella's journey unfolds:\n\n* **Exclusion from the Wedding:** When her step-mother and two proud daughters prepared to go to the wedding, they told Cinderella she could not go because she had no clothes and could not dance, and that they would be ashamed of her. \n* **Receiving Dresses from the Hazel-Tree:** Left alone at home, Cinderella went to her mother's grave beneath the hazel-tree and recited, *\"shiver and quiver, little tree, silver and gold throw down over me.\"* A bird threw down a gold and silver dress with silk and silver-embroidered slippers, which she put on to attend the wedding. On the next day of the festival, she repeated the ritual at the hazel-tree, and the bird threw down an even more beautiful dress.\n* **Dancing with the Prince:** At the wedding, the king's son (the prince) took her by the hand, danced exclusively with her, and refused to let go of her hand or dance with anyone else. \n* **Escaping and the Golden Shoe:** When Cinderella wanted to go home in the evening, the prince accompanied her to see who she belonged to (though she managed to elude him by hiding in the pigeon-house and later jumping into the hazel-bush, based on traditional lore\u2014*note: the hiding details are actually missing from this specific text snippet, which jumps straight to her fitting the shoe*). When the shoe was later tried on, she drew her foot out of the heavy wooden shoe, put it into the golden slipper (which fitted \"like a glove\"), and the king's son recognized her as the true bride.\n* **The Resolution:** Despite the step-mother and two sisters being horrified and pale with rage, the king's son took Cinderella on his horse and rode away with her.\n\n### Missing Parts of the Story\nBecause the provided context is fragmented and consists of isolated excerpts, several key parts of the story and journey are missing:\n1. **The beginning of her hardships:** The context mentions her mother's grave and her sitting in the ashes in a grey gown, but it does **not** explain how her mother died, how she came to be treated as a servant by her step-mother and step-sisters, or the origins of the \"heavy wooden shoe\" and the \"dirt\" she usually sat in.\n2. **The escape from the ball:** The text jumps from the prince wanting to accompany her home to the scenes involving the shoe fitting and the doves. Missing are the details of how she managed to evade the prince on the nights of the ball (such as hiding in the pigeon-house or cutting off parts of the step-sisters' feet, and the prince breaking through the roof).\n3. **The shoe-fitting trials:** The text does not explain how the golden shoe came to be tested on the step-sisters, nor the actions of the stepsisters cutting their toes and heels to fit the shoe, or how the white doves intervened to warn the prince.\n4. **The final fate of the step-family:** The text mentions the step-mother and sisters being horrified and pale with rage as the prince rides away with Cinderella, but it does not mention any subsequent punishment or blinding of the stepsisters by the doves at the wedding.",
+      "is_incomplete": true,
+      "chunks_retrieved": 4
+    },
+    "raptor": {
+      "answer": "Based strictly and only on the provided context, the details of Cinderella's journey from her mother's death to her royal marriage are fragmented and describe isolated events rather than a continuous, complete narrative. \n\nSpecifically, the following key parts of her journey are missing from the provided context:\n* **The complete timeline and events between her mother's death and the royal festival:** While the context mentions her mother dying and her stepfamily mistreating her, and later mentions a three-day festival and a royal ball, it is fragmented. It does not provide a continuous sequence of how she endured her mistreatment day-to-day, nor does it detail all three days of the festival in a complete order.\n* **The events of the first two nights of the ball in full continuity:** The context mentions that she attended the ball disguised, that the prince danced exclusively with her, and that she evaded him both nights (escaping into a pigeon-house and a pear tree that her father chopped down), but it lacks a smooth, comprehensive narrative linking these events chronologically to the final night and the shoe-fitting scene.\n* **The transition after losing her slipper:** The context jumps from her losing her golden slipper on the pitch-smeared staircase to the prince declaring he would only marry the woman whose foot fit it, omitting the intermediate steps of how the prince conducted his search prior to arriving at her home.\n\n**What *is* provided regarding how she reached her happy ending includes:**\n* Following her mother's death and burial, her father remarried a woman with two proud daughters who mistreated her. \n* When her father brought her a hazel twig from his travels, she planted it on her mother\u2019s grave, watered it with her tears, and prayed beneath it, allowing a magical white bird in the tree to grant her wishes and provide her with magnificent gold and silver dresses and slippers for the celebrations when her stepmother forbade her from attending the king's festival.\n* At the ball, she entranced the prince, danced with him, and on the third night fled, losing her dainty golden slipper on the pitch-smeared staircase.\n* The prince used the slipper to find her, and despite the stepsisters mutilating their own feet (cutting off toes and heels) to try to fit the shoe\u2014and the pigeons alerting the prince to their bleeding\u2014the prince insisted on seeing Cinderella.\n* Her foot fit the slipper perfectly, the prince recognized her as his true bride, and he took her on his horse and rode away with her (while pigeons perched on her shoulders and later punished the wicked stepsisters by blinding them for life during the wedding).",
+      "is_comprehensive": true,
+      "nodes_retrieved": [
+        25,
+        20,
+        26,
+        23
+      ],
+      "leaf_nodes_count": 1,
+      "summary_nodes_count": 3,
+      "summary_percentage": 75.0
+    }
+  },
+  {
+    "id": 3,
+    "corpus": "The Girl in His Mind (4,888 words)",
+    "category": "Character Arc & Psychological Theme",
+    "question": "What is Nathan Blake's primary psychological struggle throughout the story, and how do his memories with Deirdre reflect his guilt?",
+    "eval_criteria": "Requires synthesizing the mind-world pursuers, Eldoria's hut memory, graduation confrontation, and guilt feelings.",
+    "top_k": 4,
+    "flat_rag": {
+      "answer": "Based STRICTLY and ONLY on the provided context, here is the answer:\n\n**Nathan Blake's Psychological Struggle and Reflection of Guilt:**\n\n*   **His Primary Psychological Struggle:** Nathan Blake is plagued by profound guilt, self-doubt, and a painful sense of aging. He struggles with the ethics and motivations behind his actions, noting that he only \"bought\" Deirdre after Eldoria died to ease his conscience. His self-image is burdened by feelings of inadequacy, seeing himself as much older than his actual age of thirty-eight\u2014envisioning lines on a face that did not yet exist and brown hair shot with streaks of gray yet to come. He also experiences deep shame regarding his past interactions with her, noting impulses to flee and feeling that \"proms aren't for parents\" while simultaneously grappling with the reality that he is not her father.\n*   **How His Memories Reflect His Guilt:** His memories of Deirdre\u2014such as seeing her delicate profile, copper-colored hair, the remembered blueness of her graduation dress, and the diamond brooch he gave her as a graduation present pinned proudly to her bodice\u2014intensify his physical and emotional pain (\"pain tightened his throat\" and \"made him want to cry\"). These memories starkly reflect his internal conflict over his role in her life, the unequal power dynamic of having \"bought\" her, and the sorrow of their impending separation as she leaves for New Earth to attend Trevor University, underscoring his complex feelings of responsibility and remorse.\n\n**Missing Information:**\nBecause the provided context is fragmented, incomplete, and composed of isolated excerpts rather than a continuous narrative, the following key parts of the story or journey are missing:\n*   The full backstory of how Blake originally \"bought\" Deirdre and the exact nature of their legal/social relationship.\n*   The complete circumstances of Eldoria's death and role in raising Deirdre.\n*   The full scope of Deirdre's academic trajectory and the exact timeline of her move to New Earth and Trevor University.\n*   The resolution of Nathan Blake's emotional conflict and whether he ultimately decides to attend any events or reconcile his feelings of guilt.",
+      "is_incomplete": true,
+      "chunks_retrieved": 4
+    },
+    "raptor": {
+      "answer": "Based strictly and only on the provided context, here is the answer to your question:\n\n**Nathan Blake's Psychological Struggle and Guilt:**\nNathan Blake's primary psychological struggle revolves around a complex, guilt-driven relationship with Deirdre. He struggles with feelings of guilt stemming from purchasing her after her guardian, Eldoria, died, and subsequently supporting her through her education (including high school, college, and her upcoming studies at Trevor University on New Earth). \n\nHis memories with Deirdre reflect this guilt through several dynamics:\n* **The Nature of His Actions:** Blake explicitly tells Deirdre that there was \"nothing noble\" about his buying her, admitting he only did it to \"ease my conscience.\"\n* **Tensions and Paternal Attitude:** Arguments arise between them regarding a prom invitation and Nathan's paternal attitude. \n* **Emotional Pain:** As an older version of Blake (Blake Present) watches his past self and Deirdre walk away together toward her sorority house before her departure, he experiences \"deep emotional pain.\" Furthermore, when recalling his past interactions with her, \"Shame flamed in Blake's cheeks,\" highlighting his persistent internal torment regarding his past actions.\n\n---\n\n**Missing Information:**\nBecause the provided context is fragmented and combines two disjointed excerpts (one detailing his emotional memory-interactions with Deirdre and another describing a completely different plotline involving mind-travel, pursuing a criminal named Sabrina York through his \"memory-country,\" and being tracked by psyche-police), **key parts of the story and journey are missing.** Specifically, the retrieved context does not explain:\n* How Nathan Blake's guilt over Deirdre connects to the plot involving Sabrina York hiding in his mind.\n* The full backstory of how York infiltrated Blake's secret past location.\n* The resolution of the pursuit by the three mysterious pursuers and the psyche-police.",
+      "is_comprehensive": true,
+      "nodes_retrieved": [
+        27,
+        15,
+        4,
+        28
+      ],
+      "leaf_nodes_count": 2,
+      "summary_nodes_count": 2,
+      "summary_percentage": 50.0
+    }
+  },
+  {
+    "id": 4,
+    "corpus": "The Girl in His Mind (4,888 words)",
+    "category": "Multi-Hop Narrative Synthesis",
+    "question": "Summarize the key events that connect Blake's past profession as a psycheye to his current pursuit of Sabrina York inside his mind.",
+    "eval_criteria": "Requires connecting his 12-year psycheye career, Deirdre's upbringing, and Sabrina using his mind to hide.",
+    "top_k": 4,
+    "flat_rag": {
+      "answer": "Based STRICTLY and ONLY on the provided context, here is a detailed summary of the events connecting Blake's background to his pursuit of Sabrina York inside his mind:\n\n* **Blake's Background as a Psycheye:** Blake has spent twelve years working as a psycheye (part of a line of private operators acting as \"psyche-police\" for society against criminals hiding in mind-worlds). Early in his career, he opened a little office on Ex-earth, which he regards as a sentimental memory containing a bleak and lonely room with a thin-gauge steel desk and battered filing cabinets.\n* **Sabrina's Infiltration:** Sabrina York, a criminal who does not know the rudiments of throwing off a mind-tracker, attempted to hide out from Blake. In a unique twist (noted as the first time a criminal hid in their pursuer's mind), Sabrina used the place-time materialization of Blake's old Ex-earth office as her point of entry into mind-country. \n* **The Discovery:** Upon entering, Sabrina ransacked the office. Because the office was a sentimental memory, whenever Blake accepted a case he would picture it; the mental picture suddenly revealed open drawers, scattered papers, and disarray. This tipped Blake off, a suspicion confirmed when he found a woman's handkerchief with the embroidered initials \"SY\" lying by the filing cabinets.\n* **The Pursuit:** Having identified his quarry in his own mind, Blake retired to his bachelor quarters, entered at that same place-time (the Deneb 1 wasteland), and began tracking her footsteps through the confusing, topographically incongruous landscapes of his mind-country. Sabrina has now lost her only advantage, and her capture is assured unless she can locate his most recently materialized place-time before he overtakes her.\n\n**Missing Parts of the Story:**\nWhile the context details the immediate setup and the nature of mind-countries, it is fragmented regarding the broader picture. Specifically, the provided text does not explain:\n* What specific crime Sabrina York committed to prompt Blake to take the case in the first place.\n* How Sabrina initially learned about Blake's obscure, long-past Ex-earth office to use it as her point of entry. \n* The ultimate resolution of the pursuit, as the text cuts off while Blake is still hunting her down.",
+      "is_incomplete": true,
+      "chunks_retrieved": 4
+    },
+    "raptor": {
+      "answer": "Based strictly and only on the provided context, here are the key events connecting Blake's past profession as a psycheye to his current pursuit of Sabrina York:\n\n* **Entry and Discovery:** A criminal named Sabrina York hid out inside Blake's mind by entering through a past sentimental memory of his old office. Blake discovered her presence using clues she left behind.\n* **The Hunt:** Blake is currently tracking York across the dreamlike, topographically incongruous terrain of his own mind-country (moving from a Deneb 1 wasteland to a boyhood meadow and his childhood house), following her physical footprints. \n* **Utilization of Professional Expertise:** Blake's twelve years of experience as a psycheye have taught him \"all the tricks\" of tracking, noting that York does not know the rudiments of throwing off a mind-tracker and assumed simply hiding in her tracker's mind would guarantee her safety. \n* **Current Status:** With her advantage lost, York is now at Blake's mercy and her capture is assured unless she discovers his presence and locates his most recently materialized place-time first.\n\n**Missing Parts of the Story:**\nBecause the provided context is a fragmented excerpt, the following key parts of the overall story and journey are missing:\n* The final confrontation, apprehension, or capture of Sabrina York.\n* The resolution regarding how Sabrina York managed to discover and learn about Blake's secret past office location.\n* The full context, identity, and ultimate impact of the \"three mysterious pursuers\" tracking Blake.\n* The specific nature and outcome of the encounter with the advanced mind-country beings (such as the higher-scale entities mentioned, like the Virgin Mary or the army memory-image) in relation to the current pursuit.",
+      "is_comprehensive": true,
+      "nodes_retrieved": [
+        28,
+        8,
+        31,
+        23
+      ],
+      "leaf_nodes_count": 2,
+      "summary_nodes_count": 2,
+      "summary_percentage": 50.0
+    }
+  }
+]

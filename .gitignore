@@ -31,3 +31,17 @@ finetuning_ckpts/
 assertion.log
 *.log
 *.db
+# --- Raptor-code additions ---
+.env
+.venv*/
+.venv*
+data/
+artifacts/
+.cache/
+quality_repo/
+*.pdf
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+web/dist/

@@ -1,196 +1,161 @@
-<!-- <p align="center">
-  <img align="center" src="raptor.jpg" width="1000px" />
-</p>
-<p align="left"> -->
-
-<!-- <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="raptor.jpg" width="1000px">
-  <source media="(prefers-color-scheme: light)" srcset="raptor_dark.png" width="1000px">
-  
-</picture> -->
-
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="raptor_dark.png">
-  <img alt="Shows an illustrated sun in light color mode and a moon with stars in dark color mode." src="raptor.jpg">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/raptor_dark.png">
+  <img alt="RAPTOR" src="docs/images/raptor.jpg">
 </picture>
 
-## RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval
+# Raptor-code
 
-**RAPTOR** introduces a novel approach to retrieval-augmented language models by constructing a recursive tree structure from documents. This allows for more efficient and context-aware information retrieval across large texts, addressing common limitations in traditional language models. 
+**Tree-organized retrieval for long documents (and, soon, codebases).**
 
+RAPTOR builds a tree over a document: it splits the text into chunks, clusters similar
+chunks, summarizes each cluster, and repeats on the summaries. A question can then be
+answered from both the fine-grained chunks and the higher-level summaries, which helps
+with questions that span a whole document.
 
+This repository is a production-oriented rework of the original RAPTOR implementation,
+with Gemini and local models, a safe index format, tests, and a CLI. It is the base for
+a strategy-experiment harness, codebase indexing, and a web UI (see the [roadmap](#roadmap)).
 
-For detailed methodologies and implementations, refer to the original paper:
+## Install
 
-- [RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval](https://arxiv.org/abs/2401.18059)
-
-[![Paper page](https://huggingface.co/datasets/huggingface/badges/resolve/main/paper-page-sm.svg)](https://huggingface.co/papers/2401.18059)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/raptor-recursive-abstractive-processing-for/question-answering-on-quality)](https://paperswithcode.com/sota/question-answering-on-quality?p=raptor-recursive-abstractive-processing-for)
-
-## Installation
-
-Before using RAPTOR, ensure Python 3.8+ is installed. Clone the RAPTOR repository and install necessary dependencies:
+Python 3.10+.
 
 ```bash
-git clone https://github.com/parthsarthi03/raptor.git
-cd raptor
-pip install -r requirements.txt
+python -m venv .venv
+```
+```bash
+.venv/Scripts/activate          # Windows; on macOS/Linux: source .venv/bin/activate
+```
+```bash
+pip install -e ".[gemini,app,dev]"
 ```
 
-## Basic Usage
+Optional extras: `local` (sentence-transformers embeddings and a cross-encoder reranker,
+runs offline), `ollama` (local LLMs through Ollama), `all`.
 
-To get started with RAPTOR, follow these steps:
+Put your Gemini key in a `.env` file (gitignored):
 
-### Setting Up RAPTOR
-
-First, set your OpenAI API key and initialize the RAPTOR configuration:
-
-```python
-import os
-os.environ["OPENAI_API_KEY"] = "your-openai-api-key"
-
-from raptor import RetrievalAugmentation
-
-# Initialize with default configuration. For advanced configurations, check the documentation. [WIP]
-RA = RetrievalAugmentation()
+```bash
+cp .env.example .env    # then set GEMINI_API_KEY=...
 ```
 
-### Adding Documents to the Tree
-
-Add your text documents to RAPTOR for indexing:
+## Quickstart
 
 ```python
-with open('sample.txt', 'r') as file:
-    text = file.read()
-RA.add_documents(text)
+from raptor import RaptorConfig, RetrievalAugmentation
+
+config = RaptorConfig()
+config.chunking.max_tokens = 150
+
+ra = RetrievalAugmentation(config)  # Gemini models with an on-disk cache
+ra.add_documents(open("demo/sample.txt", encoding="utf-8").read())
+print(ra.answer_question("How did Cinderella reach her happy ending?"))
+
+ra.save("artifacts/indexes/cinderella")  # a directory: tree.json + embeddings.npz
+ra = RetrievalAugmentation(config, tree="artifacts/indexes/cinderella")
 ```
 
-### Answering Questions
-
-You can now use RAPTOR to answer questions based on the indexed documents:
+Inspect what was retrieved:
 
 ```python
-question = "How did Cinderella reach her happy ending?"
-answer = RA.answer_question(question=question)
-print("Answer: ", answer)
+result = ra.retrieve_nodes("Who helped Cinderella?", top_k=8)
+for r in result.nodes:
+    print(r.layer, r.node.index, round(r.score, 3), r.node.text[:80])
 ```
 
-### Saving and Loading the Tree
+### CLI
 
-Save the constructed tree to a specified path:
-
-```python
-SAVE_PATH = "demo/cinderella"
-RA.save(SAVE_PATH)
+```bash
+raptor build demo/sample.txt --out artifacts/indexes/cinderella
+```
+```bash
+raptor ask artifacts/indexes/cinderella "How did Cinderella reach her happy ending?" --show-context
+```
+```bash
+raptor info demo/trees/quality_story_1_gemini
+```
+```bash
+raptor migrate old_tree.pkl artifacts/indexes/old_tree    # convert a tree saved by the original RAPTOR
 ```
 
-Load the saved tree back into RAPTOR:
+All settings live in a YAML-serializable `RaptorConfig` (`raptor build -c config.yaml`):
 
-```python
-RA = RetrievalAugmentation(tree=SAVE_PATH)
-answer = RA.answer_question(question=question)
+```yaml
+chunking:   {strategy: sentence, max_tokens: 150, overlap_tokens: 0}
+clustering: {strategy: raptor_gmm, reduction_dimension: 10, threshold: 0.1, random_state: 224}
+builder:    {max_layers: 5, summarization_length: 100, max_workers: 4}
+retrieval:  {mode: collapsed, top_k: 10, max_tokens: 3500}
+models:     {provider: gemini, embedding_model: gemini-embedding-001, llm_model: gemini-3.5-flash-lite}
 ```
 
+### Your own models
 
-### Extending RAPTOR with other Models
-
-RAPTOR is designed to be flexible and allows you to integrate any models for summarization, question-answering (QA), and embedding generation. Here is how to extend RAPTOR with your own models:
-
-#### Custom Summarization Model
-
-If you wish to use a different language model for summarization, you can do so by extending the `BaseSummarizationModel` class. Implement the `summarize` method to integrate your custom summarization logic:
+Subclass `BaseEmbeddingModel` (implement `embed_documents` for batches, or the original
+`create_embedding`), `BaseSummarizationModel.summarize`, or `BaseQAModel.answer_question`,
+and pass the instances in:
 
 ```python
-from raptor import BaseSummarizationModel
-
-class CustomSummarizationModel(BaseSummarizationModel):
-    def __init__(self):
-        # Initialize your model here
-        pass
-
-    def summarize(self, context, max_tokens=150):
-        # Implement your summarization logic here
-        # Return the summary as a string
-        summary = "Your summary here"
-        return summary
-```
-
-#### Custom QA Model
-
-For custom QA models, extend the `BaseQAModel` class and implement the `answer_question` method. This method should return the best answer found by your model given a context and a question:
-
-```python
-from raptor import BaseQAModel
-
-class CustomQAModel(BaseQAModel):
-    def __init__(self):
-        # Initialize your model here
-        pass
-
-    def answer_question(self, context, question):
-        # Implement your QA logic here
-        # Return the answer as a string
-        answer = "Your answer here"
-        return answer
-```
-
-#### Custom Embedding Model
-
-To use a different embedding model, extend the `BaseEmbeddingModel` class. Implement the `create_embedding` method, which should return a vector representation of the input text:
-
-```python
-from raptor import BaseEmbeddingModel
-
-class CustomEmbeddingModel(BaseEmbeddingModel):
-    def __init__(self):
-        # Initialize your model here
-        pass
-
-    def create_embedding(self, text):
-        # Implement your embedding logic here
-        # Return the embedding as a numpy array or a list of floats
-        embedding = [0.0] * embedding_dim  # Replace with actual embedding logic
-        return embedding
-```
-
-#### Integrating Custom Models with RAPTOR
-
-After implementing your custom models, integrate them with RAPTOR as follows:
-
-```python
-from raptor import RetrievalAugmentation, RetrievalAugmentationConfig
-
-# Initialize your custom models
-custom_summarizer = CustomSummarizationModel()
-custom_qa = CustomQAModel()
-custom_embedding = CustomEmbeddingModel()
-
-# Create a config with your custom models
-custom_config = RetrievalAugmentationConfig(
-    summarization_model=custom_summarizer,
-    qa_model=custom_qa,
-    embedding_model=custom_embedding
+ra = RetrievalAugmentation(
+    config,
+    embedding_model=MyEmbedder(),
+    summarization_model=MySummarizer(),
+    qa_model=MyQA(),
+    cache=True,
 )
-
-# Initialize RAPTOR with your custom config
-RA = RetrievalAugmentation(config=custom_config)
 ```
 
-Check out `demo.ipynb` for examples on how to specify your own summarization/QA models, such as Llama/Mistral/Gemma, and Embedding Models such as SBERT, for use with RAPTOR.
+The original `RetrievalAugmentationConfig(tb_max_tokens=..., tr_top_k=..., qa_model=...)`
+interface still works.
 
-Note: More examples and ways to configure RAPTOR are forthcoming. Advanced usage and additional features will be provided in the documentation and repository updates.
+### QuALITY demo
 
-## Contributing
+```bash
+python scripts/download_quality.py
+```
+```bash
+python examples/quality_compare.py --story 1
+```
+```bash
+streamlit run app.py
+```
 
-RAPTOR is an open-source project, and contributions are welcome. Whether you're fixing bugs, adding new features, or improving documentation, your help is appreciated.
+`demo/trees/` holds prebuilt trees for the first two QuALITY dev stories and Cinderella.
+An earlier 15-question run (`demo/results/quality_eval_results.json`) scored Flat RAG and
+RAPTOR the same (53%). That sample is far too small to separate them; the experiment
+harness on the roadmap is meant to measure this properly.
 
-## License
+## Development
 
-RAPTOR is released under the MIT License. See the LICENSE file in the repository for full details.
+```bash
+pytest                 # offline unit tests (fake models, no network)
+```
+```bash
+pytest -m live         # end-to-end against Gemini (needs GEMINI_API_KEY)
+```
+```bash
+ruff check . && ruff format --check . && mypy
+```
 
-## Citation
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the package is organized and
+what changed from the original code.
 
-If RAPTOR assists in your research, please cite it as follows:
+## Roadmap
+
+1. **Production cleanup** (done): package layout, safe storage, batched and cached
+   Gemini calls, bug fixes, tests, CI.
+2. **Strategy experiments**: an eval harness on QuALITY comparing chunking,
+   clustering, summarization, retrieval and embedding strategies.
+3. **Codebases**: tree-sitter symbol chunking, a structural plus semantic hierarchy,
+   call and import graphs, incremental indexing, a CLI and an MCP server.
+4. **Web UI**: a React app on a FastAPI service, with live build progress, a tree
+   explorer, a Flat-vs-RAPTOR arena, experiment dashboards and a code explorer.
+
+## Acknowledgements
+
+This project builds on **RAPTOR** by Parth Sarthi, Salman Abdullah, Aditi Tuli, Shubh
+Khanna, Anna Goldie and Christopher D. Manning, and on the original implementation at
+[parthsarthi03/raptor](https://github.com/parthsarthi03/raptor) (MIT). The QuALITY
+benchmark is by Pang et al. ([nyu-mll/quality](https://github.com/nyu-mll/quality)).
 
 ```bibtex
 @inproceedings{sarthi2024raptor,
@@ -201,4 +166,6 @@ If RAPTOR assists in your research, please cite it as follows:
 }
 ```
 
-Stay tuned for more examples, configuration guides, and updates.
+## License
+
+MIT. See [LICENSE.txt](LICENSE.txt); the original copyright notice is retained.

@@ -1,0 +1,380 @@
+{
+  "metrics": {
+    "flat_rag": {
+      "overall_accuracy": 53.333333333333336,
+      "hard_subset_accuracy": 50.0,
+      "macro_precision": 48.333333333333336,
+      "macro_recall": 46.666666666666664,
+      "macro_f1": 45.0,
+      "weighted_precision": 63.11111111111111,
+      "weighted_recall": 53.333333333333336,
+      "weighted_f1": 55.333333333333336,
+      "total_questions": 15,
+      "hard_questions": 10
+    },
+    "raptor": {
+      "overall_accuracy": 53.333333333333336,
+      "hard_subset_accuracy": 50.0,
+      "macro_precision": 45.0,
+      "macro_recall": 46.666666666666664,
+      "macro_f1": 41.99134199134199,
+      "weighted_precision": 58.666666666666664,
+      "weighted_recall": 53.333333333333336,
+      "weighted_f1": 51.94805194805194,
+      "total_questions": 15,
+      "hard_questions": 10
+    }
+  },
+  "details": {
+    "flat_rag": {
+      "preds": [
+        2,
+        3,
+        4,
+        1,
+        1,
+        3,
+        2,
+        1,
+        2,
+        4,
+        2,
+        3,
+        4,
+        1,
+        1
+      ],
+      "golds": [
+        2,
+        2,
+        3,
+        4,
+        1,
+        4,
+        2,
+        1,
+        2,
+        2,
+        2,
+        4,
+        4,
+        1,
+        4
+      ],
+      "hard_flags": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "details": [
+        {
+          "story": "The Girl in His Mind",
+          "qid": 1,
+          "pred": 2,
+          "gold": 2,
+          "hard": 0,
+          "raw": "Option 2\n\n**Justification:**\nBased on the provided text, the context explicitly states: \"Ever since he had first set foot into his mind, some ten hours ago, they had been on his trail...\" This directl"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 2,
+          "pred": 3,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 3\n\nBased on the provided text, Deirdre becomes upset when Blake implies he is her father (\"I'll thank you not to imply that you're my father. One would think from the way you talk that you are "
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 3,
+          "pred": 4,
+          "gold": 3,
+          "hard": 1,
+          "raw": "Based strictly on the provided context, the text does not explicitly provide a reason why shame flames in Blake's cheeks when Deirdre goes to prepare Eldoria's dais. \n\nLooking closely at the available"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 4,
+          "pred": 1,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Based on the provided context, the text mentions the three super-images (Miss Stoddart, Officer Finch, and Vera Velvetskin) and questions why Blake created them given that super-images are typically c"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 5,
+          "pred": 1,
+          "gold": 1,
+          "hard": 1,
+          "raw": "Option 1\n\n**Justification:** \nBased on the provided context, Sabrina York is referred to as Blake's \"quarry\" whom he is pursuing (\"Retiring to his bachelor quarters, he had entered at the same place-t"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 6,
+          "pred": 3,
+          "gold": 4,
+          "hard": 0,
+          "raw": "Based on the provided context, there is no mention of Blake being a high-earning private psycheye (Option 3), nor is there any mention of him being afraid of cannibalism (Option 1) or knowing she need"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 1,
+          "pred": 2,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 2\n\n**Justification:** \nAccording to the provided text, the Tr'en's subconscious worked on making the insoluble problem (Korvin) disappear because their conscious and subconscious minds could no"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 2,
+          "pred": 1,
+          "gold": 1,
+          "hard": 1,
+          "raw": "Option 1\n\n**Justification:** \nThe text explicitly states in the first excerpt that the Tr'en language was \"easily enough learned under drug hypnosis\". Later in the text, it mentions, \"True, every nigh"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 3,
+          "pred": 2,
+          "gold": 2,
+          "hard": 0,
+          "raw": "Option 2\n\n**Justification:** \nBased on the provided text, Korvin avoids disclosing the true intent or making sense to the Tr'en not by sabotaging the machine or because it was faulty, but simply by te"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 4,
+          "pred": 4,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 4\n\nJustification: Based on the provided context, the text notes that the Tr'en \"were too efficient physically to try for the mental sciences at all\" and possessed a \"literalist approach to the "
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 5,
+          "pred": 2,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 2\n\n**Justification:** \nBased on the provided context, the Tr'en's genius and logic are strictly restricted to the physical and mathematical sciences, lacking insight into the mental sciences an"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 6,
+          "pred": 3,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Option 3\n\n**Justification:** \nBased on the provided context, the experts explicitly deduce that Korvin must be a traitor to his native planet who wants them to conquer Earth and has come secretly to a"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 7,
+          "pred": 4,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Option 4\n\n**Justification:** \nThe text explicitly describes the physical appearance of the expert's facial expression when it mentions \"...showing all of his teeth\" and later notes, \"...as did the dis"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 8,
+          "pred": 1,
+          "gold": 1,
+          "hard": 0,
+          "raw": "Option 1\n\n**Justification:** \nAccording to the provided context, the heavy-set green expert explains the Tr'en government and succession of power by stating: \"The Ruler is adopted by the previous Rule"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 9,
+          "pred": 1,
+          "gold": 4,
+          "hard": 0,
+          "raw": "Option 1\n\n**Justification:** \nAccording to the provided text, the experts examined the lie-detector and stated, *\"The machine says that you tell the truth... Thus, you must be a traitor to your native"
+        }
+      ]
+    },
+    "raptor": {
+      "preds": [
+        2,
+        3,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        2,
+        4,
+        2,
+        3,
+        4,
+        1,
+        1
+      ],
+      "golds": [
+        2,
+        2,
+        3,
+        4,
+        1,
+        4,
+        2,
+        1,
+        2,
+        2,
+        2,
+        4,
+        4,
+        1,
+        4
+      ],
+      "hard_flags": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "details": [
+        {
+          "story": "The Girl in His Mind",
+          "qid": 1,
+          "pred": 2,
+          "gold": 2,
+          "hard": 0,
+          "raw": "Option 2\n\n**Justification:** \nAccording to the provided text, while tracking Sabrina York through his mind-country, it states: *\"Ever since he had first set foot into his mind, some ten hours ago, the"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 2,
+          "pred": 3,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 3\n\n**Justification:** \nWhen Blake Past suggests that the young man take her to the prom, Deirdre becomes angry and explicitly says, \"I'll thank you not to imply that you're my father. One would"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 3,
+          "pred": 1,
+          "gold": 3,
+          "hard": 1,
+          "raw": "Could not generate answer due to safety filter."
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 4,
+          "pred": 2,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Based on the provided context, the correct answer is not explicitly matched to one of the specific guilt scenarios listed in the options (as the text states that those three super-images were *not* cr"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 5,
+          "pred": 1,
+          "gold": 1,
+          "hard": 1,
+          "raw": "Option 1\n\n**Justification:** \nThe provided context explicitly states that Nathan Blake, a private psycheye, \"pursues a criminal named Sabrina York through his own memory-country.\" Therefore, Sabrina Y"
+        },
+        {
+          "story": "The Girl in His Mind",
+          "qid": 6,
+          "pred": 1,
+          "gold": 4,
+          "hard": 0,
+          "raw": "Based on the provided text, none of the options are explicitly supported as the reason why Blake doesn't haggle with Eldoria (the text simply states, \"He did not haggle, but counted out the amount and"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 1,
+          "pred": 2,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 2\n\n**Justification:** \nAccording to the context, the Tr'en lacked insight into the mental sciences, which allowed their subconscious minds to work on Korvin's escape without distractions: *\"Eve"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 2,
+          "pred": 1,
+          "gold": 1,
+          "hard": 1,
+          "raw": "Option 1\n\n**Justification:** \nThe text explicitly states at the beginning of the story that the Tr'en language was \"...easily enough learned under drug hypnosis\". Later, the narrative reinforces this "
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 3,
+          "pred": 2,
+          "gold": 2,
+          "hard": 0,
+          "raw": "Option 2\n\n**Justification:** \nBased on the provided context, Korvin successfully avoids giving away his true plans and keeps his mission intact not by tampering with the machine or relying on a faulty"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 4,
+          "pred": 4,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 4\n\nJustification: Based on the provided context, the text notes that the Tr'en are an extremely efficient and literal race (\"The Tr'en literalist approach to the smallest problems of everyday l"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 5,
+          "pred": 2,
+          "gold": 2,
+          "hard": 1,
+          "raw": "Option 2\n\n**Justification:** \nBased on the provided context, the Tr'en's genius and logic are \"restricted to the physical and mathematical,\" and they lack insight into \"the mental sciences.\" Because o"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 6,
+          "pred": 3,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Option 3\n\n**Justification:** \nBased on the provided context, there are indeed indications of their interest in attacking Earth. When Korvin states his truthful answers during the interrogation, the lo"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 7,
+          "pred": 4,
+          "gold": 4,
+          "hard": 1,
+          "raw": "Option 4\n\n**Justification:** \nThe text explicitly describes the physical nature of the expert's facial expression when it mentions: \"The expert frowned horribly, showing all of his teeth\" and later re"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 8,
+          "pred": 1,
+          "gold": 1,
+          "hard": 0,
+          "raw": "Option 1\n\n**Justification:** \nAccording to the provided text, the green-set heavy being explaining their government states: \"The Ruler is adopted by the previous Ruler; in this way we are assured of a"
+        },
+        {
+          "story": "Lost in Translation",
+          "qid": 9,
+          "pred": 1,
+          "gold": 4,
+          "hard": 0,
+          "raw": "Option 1\n\n**Justification:** \nAccording to the provided text, the experts examined the lie-detector and stated, *\"The machine says that you tell the truth... Thus, you must be a traitor to your native"
+        }
+      ]
+    }
+  }
+}
