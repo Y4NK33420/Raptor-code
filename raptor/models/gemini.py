@@ -141,6 +141,18 @@ class _GeminiLLM:
             lambda c: c.models.generate_content(model=self.model_name, contents=prompt, config=cfg),
         )
 
+    def generate_json(
+        self, prompt: str, schema: dict[str, Any], *, temperature: float = 0.0
+    ) -> str | None:
+        """Generate a JSON reply that follows ``schema``. Returns the raw text (``None`` if filtered)."""
+        resp = self._generate(
+            prompt,
+            temperature=temperature,
+            response_mime_type="application/json",
+            response_schema=schema,
+        )
+        return self._text(resp)
+
     @staticmethod
     def _text(resp: Any) -> str | None:
         try:

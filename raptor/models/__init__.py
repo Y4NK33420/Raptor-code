@@ -70,9 +70,10 @@ def build_models(cfg: ModelsConfig | None = None, settings: Settings | None = No
             query_task_type="RETRIEVAL_QUERY" if task else None,
         )
     elif emb_provider == "local":
-        from .local import SBertEmbeddingModel
+        from .local import SBertEmbeddingModel, resolve_local_embedding
 
-        embedding = SBertEmbeddingModel(cfg.embedding_model)
+        hub_id, q_prefix, d_prefix = resolve_local_embedding(cfg.embedding_model)
+        embedding = SBertEmbeddingModel(hub_id, query_prefix=q_prefix, document_prefix=d_prefix)
     else:
         from .ollama import OllamaEmbeddingModel
 

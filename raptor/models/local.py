@@ -8,6 +8,27 @@ import numpy as np
 
 from .base import BaseEmbeddingModel
 
+BGE_QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
+
+# Short names and the instruction prefixes each model was trained with.
+LOCAL_EMBEDDINGS: dict[str, tuple[str, str, str]] = {
+    # alias: (hub id, query prefix, document prefix)
+    "bge-small": ("BAAI/bge-small-en-v1.5", BGE_QUERY_PREFIX, ""),
+    "bge-base": ("BAAI/bge-base-en-v1.5", BGE_QUERY_PREFIX, ""),
+    "e5-base": ("intfloat/e5-base-v2", "query: ", "passage: "),
+    "e5-small": ("intfloat/e5-small-v2", "query: ", "passage: "),
+}
+
+
+def resolve_local_embedding(name: str) -> tuple[str, str, str]:
+    """Map a model name or alias to ``(hub id, query prefix, document prefix)``."""
+    if name in LOCAL_EMBEDDINGS:
+        return LOCAL_EMBEDDINGS[name]
+    for hub_id, q, d in LOCAL_EMBEDDINGS.values():
+        if name == hub_id:
+            return hub_id, q, d
+    return name, "", ""
+
 
 class SBertEmbeddingModel(BaseEmbeddingModel):
     """Sentence-transformers embedder.

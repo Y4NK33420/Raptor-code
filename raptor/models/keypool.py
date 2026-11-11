@@ -29,6 +29,15 @@ RATE_LIMIT_COOLDOWN = 60.0
 DAILY_QUOTA_COOLDOWN = 3600.0
 MAX_ATTEMPTS = 8
 
+#: When True, a call raises :class:`QuotaExhaustedError` once every key has hit a per-day
+#: quota for the model, instead of waiting out the cooldown. Batch jobs (the eval runner)
+#: turn this on so they stop cleanly rather than stall for an hour.
+FAIL_ON_DAILY_QUOTA = False
+
+
+class QuotaExhaustedError(RuntimeError):
+    """Every configured key has used up its daily quota for a model."""
+
 
 def is_rate_limit(exc: BaseException) -> bool:
     code = getattr(exc, "code", None)
@@ -102,6 +111,13 @@ class KeyPool:
         with self._lock:
             slot.cooldown_until[bucket] = time.monotonic() + seconds
 
+    def _all_daily_exhausted(self, bucket: str) -> bool:
+        now = time.monotonic()
+        with self._lock:
+            return all(
+                s.cooldown_until.get(bucket, 0.0) - now > RATE_LIMIT_COOLDOWN for s in self.slots
+            )
+
     def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T]) -> T:
         """Run ``fn(client)`` on an available key, failing over and retrying as needed."""
         attempts = MAX_ATTEMPTS + len(self.slots)
@@ -122,6 +138,10 @@ class KeyPool:
                         " (trying next key)" if len(self.slots) > 1 else "",
                     )
                     self.cooldown(slot, bucket, seconds)
+                    if FAIL_ON_DAILY_QUOTA and self._all_daily_exhausted(bucket):
+                        raise QuotaExhaustedError(
+                            f"daily quota used up on every key for {bucket}"
+                        ) from exc
                 else:
                     delay = min(60.0, 2.0 * 2**attempt) * random.uniform(0.5, 1.0)
                     logger.warning("Gemini call failed (%s); retrying in %.1fs", exc, delay)
