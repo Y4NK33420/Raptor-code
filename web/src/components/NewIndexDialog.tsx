@@ -144,7 +144,7 @@ export function NewIndexDialog({ open, onOpenChange }: { open: boolean; onOpenCh
                         {s.n_questions} questions
                       </div>
                     </div>
-                    {s.index_ids.length > 0 && <Badge tone="outline">indexed</Badge>}
+                    {(s.index_ids ?? []).length > 0 && <Badge tone="outline">indexed</Badge>}
                     {setId === s.set_id && <Check className="size-4 text-accent" />}
                   </button>
                 ))}
