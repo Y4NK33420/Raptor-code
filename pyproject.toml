@@ -31,7 +31,6 @@ dependencies = [
 gemini = ["google-genai>=1.0"]
 local = ["sentence-transformers>=3.0", "torch>=2.1"]
 ollama = ["httpx>=0.27"]
-app = ["streamlit>=1.40"]
 server = ["fastapi>=0.115", "uvicorn[standard]>=0.30", "python-multipart>=0.0.9"]
 dev = [
   "pytest>=8.0",
@@ -42,7 +41,7 @@ dev = [
   "types-PyYAML",
   "httpx>=0.27",
 ]
-all = ["raptor-code[gemini,local,ollama,app,server]"]
+all = ["raptor-code[gemini,local,ollama,server]"]
 
 [project.scripts]
 raptor = "raptor.cli:app"

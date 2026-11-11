@@ -35,7 +35,14 @@ BASE = {
 RUNS = [
     # name, method, skill (logit), factor overrides, layer share, created
     ("flat-baseline", "flat", 0.15, {}, {"0": 1.0}, "2026-11-02T09:12:00Z"),
-    ("raptor-baseline", "raptor", 0.55, {}, {"0": 0.58, "1": 0.31, "2": 0.11}, "2026-11-02T10:40:00Z"),
+    (
+        "raptor-baseline",
+        "raptor",
+        0.55,
+        {},
+        {"0": 0.58, "1": 0.31, "2": 0.11},
+        "2026-11-02T10:40:00Z",
+    ),
     (
         "chunk-250",
         "raptor",
@@ -107,7 +114,9 @@ def main() -> None:
     stories = load_quality("dev", limit=N_STORIES)
     questions = [(s, q) for s in stories for q in s.questions]
     qrng = random.Random(7)
-    difficulty = {q.question_id: qrng.gauss(0.9 if q.difficult else -0.4, 0.9) for _, q in questions}
+    difficulty = {
+        q.question_id: qrng.gauss(0.9 if q.difficult else -0.4, 0.9) for _, q in questions
+    }
     if OUT.exists():
         shutil.rmtree(OUT)
     for name, method, skill, over, share, created in RUNS:
@@ -134,7 +143,11 @@ def main() -> None:
                 layer = rng.choices(list(share), weights=list(share.values()))[0]
                 next_id[layer] += rng.randint(1, 3)
                 retrieved.append(
-                    {"node_index": next_id[layer], "layer": int(layer), "score": round(rng.uniform(0.55, 0.86), 4)}
+                    {
+                        "node_index": next_id[layer],
+                        "layer": int(layer),
+                        "score": round(rng.uniform(0.55, 0.86), 4),
+                    }
                 )
             retrieved.sort(key=lambda r: -r["score"])
             rows.append(
@@ -172,10 +185,15 @@ def main() -> None:
             "split": "dev",
             "method": method,
             "config_fingerprint": fp,
-            "factors": {f: describe(f, factors[f]) for f in ("chunking", "clustering", "retrieval", "embedding")},
+            "factors": {
+                f: describe(f, factors[f])
+                for f in ("chunking", "clustering", "retrieval", "embedding")
+            },
             "n_questions": n,
             "accuracy": round(k / n, 4),
-            "accuracy_hard": round(sum(r["correct"] for r in hard) / len(hard), 4) if hard else None,
+            "accuracy_hard": round(sum(r["correct"] for r in hard) / len(hard), 4)
+            if hard
+            else None,
             "ci95": wilson(k, n),
             "layer_share": share,
             "cost": {
@@ -188,7 +206,9 @@ def main() -> None:
             "query_seconds_mean": round(sum(r["latency_s"] for r in rows) / n, 3),
             "tree_stats": {
                 "mean_layers": 0.0 if flat else round(rng.uniform(1.6, 2.4), 2),
-                "mean_nodes": round(rng.uniform(28, 34), 1) if flat else round(rng.uniform(36, 48), 1),
+                "mean_nodes": round(rng.uniform(28, 34), 1)
+                if flat
+                else round(rng.uniform(36, 48), 1),
                 "mean_branching": 0.0 if flat else round(rng.uniform(4.2, 6.5), 2),
             },
             "simulated": True,
