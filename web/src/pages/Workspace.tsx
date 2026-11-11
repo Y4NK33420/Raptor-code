@@ -77,7 +77,7 @@ export default function WorkspacePage() {
           <h1 className="truncate font-display text-xl font-semibold">{info?.name ?? <Skeleton className="h-6 w-48" />}</h1>
           {info && (
             <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted">
-              <span className="num">{info.num_nodes} nodes</span>·<span>{info.num_layers} layers</span>
+              <span className="num">{info.num_nodes} nodes</span>·<span>{info.num_layers} {info.num_layers === 1 ? 'summary layer' : 'summary layers'}</span>
               {info.origin === 'demo' && <Badge>demo</Badge>}
             </p>
           )}
