@@ -128,6 +128,11 @@ def eval_config():
     cfg.ingest.exclude = list(EXCLUDE)
     cfg.ingest.use_git = False
     cfg.summary.depth = "file"
+    # Local embeddings: ~40 indexes plus line windows would exhaust the free Gemini
+    # embedding quota. Summaries still use Gemini (cached across nearby commits).
+    cfg.models.embedding_provider = "local"
+    cfg.models.embedding_model = "sentence-transformers/multi-qa-mpnet-base-cos-v1"
+    cfg.models.use_task_types = False
     return cfg
 
 
