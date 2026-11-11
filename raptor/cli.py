@@ -123,6 +123,7 @@ app.add_typer(code_app, name="code")
 app.add_typer(
     eval_app, name="eval", help="QuALITY experiment harness (run, report, compare, list)."
 )
+app.command("serve")(__import__("raptor.server.cli", fromlist=["serve"]).serve)
 
 if __name__ == "__main__":  # pragma: no cover
     app()

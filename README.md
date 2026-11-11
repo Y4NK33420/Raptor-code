@@ -27,7 +27,7 @@ python -m venv .venv
 .venv/Scripts/activate          # Windows; on macOS/Linux: source .venv/bin/activate
 ```
 ```bash
-pip install -e ".[gemini,app,dev]"
+pip install -e ".[gemini,server,dev]"
 ```
 
 Optional extras: `local` (sentence-transformers embeddings and a cross-encoder reranker,
@@ -120,8 +120,10 @@ python scripts/download_quality.py
 python examples/quality_compare.py --story 1
 ```
 ```bash
-streamlit run app.py
+raptor serve            # the web UI at http://127.0.0.1:8765 (add --fake-models to work offline)
 ```
+
+See [docs/UI.md](docs/UI.md) for the UI, its API and the frontend dev workflow.
 
 `demo/trees/` holds prebuilt trees for the first two QuALITY dev stories and Cinderella.
 An earlier 15-question run (`demo/results/quality_eval_results.json`) scored Flat RAG and

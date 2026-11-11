@@ -1,0 +1,16 @@
+name: traversal
+method: raptor
+split: dev
+n_stories: 8
+chunking:
+  strategy: sentence
+  max_tokens: 100
+clustering:
+  strategy: raptor_gmm
+  reduction_dimension: 10
+retrieval:
+  mode: traversal
+  top_k: 4
+  max_tokens: 2000
+embedding:
+  model: gemini-embedding-001
