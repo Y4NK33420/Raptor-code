@@ -54,6 +54,15 @@ class RetrievalConfig(_Section):
     threshold: float = Field(0.5, ge=-1.0, le=1.0)
     start_layer: int | None = Field(None, ge=0)
     num_layers: int | None = Field(None, ge=1)
+    # Optional collapsed-mode refinements (all off by default = plain dense top-k).
+    # hybrid: fuse dense and BM25 rankings with reciprocal rank fusion.
+    hybrid: bool = False
+    rrf_k: int = Field(60, ge=1)
+    # reranker: cross-encoder model that re-scores the top ``candidates`` nodes.
+    reranker: str | None = None
+    # mmr_lambda: maximal marginal relevance over the top ``candidates`` (1.0 = relevance only).
+    mmr_lambda: float | None = Field(None, ge=0.0, le=1.0)
+    candidates: int = Field(50, ge=1)
 
 
 class ModelsConfig(_Section):
