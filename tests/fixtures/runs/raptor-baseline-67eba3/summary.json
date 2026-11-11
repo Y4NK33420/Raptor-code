@@ -1,0 +1,40 @@
+{
+  "run_id": "raptor-baseline-67eba3",
+  "name": "raptor-baseline",
+  "created_at": "2026-11-02T10:40:00Z",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "67eba3bba5b2",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed",
+    "embedding": "gemini-embedding-001"
+  },
+  "n_questions": 71,
+  "accuracy": 0.5211,
+  "accuracy_hard": 0.3684,
+  "ci95": [
+    0.4069,
+    0.6332
+  ],
+  "layer_share": {
+    "0": 0.58,
+    "1": 0.31,
+    "2": 0.11
+  },
+  "cost": {
+    "llm_calls": 162,
+    "embed_calls": 95,
+    "cache_hits": 122,
+    "cache_misses": 44
+  },
+  "build_seconds": 74.4,
+  "query_seconds_mean": 1.529,
+  "tree_stats": {
+    "mean_layers": 2.29,
+    "mean_nodes": 42.0,
+    "mean_branching": 6.26
+  },
+  "simulated": true
+}

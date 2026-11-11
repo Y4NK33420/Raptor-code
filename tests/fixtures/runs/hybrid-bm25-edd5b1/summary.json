@@ -1,0 +1,40 @@
+{
+  "run_id": "hybrid-bm25-edd5b1",
+  "name": "hybrid-bm25",
+  "created_at": "2026-11-06T13:45:00Z",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "edd5b122e1e7",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed+bm25+rrf",
+    "embedding": "gemini-embedding-001"
+  },
+  "n_questions": 71,
+  "accuracy": 0.6197,
+  "accuracy_hard": 0.5,
+  "ci95": [
+    0.5034,
+    0.7237
+  ],
+  "layer_share": {
+    "0": 0.63,
+    "1": 0.27,
+    "2": 0.1
+  },
+  "cost": {
+    "llm_calls": 137,
+    "embed_calls": 95,
+    "cache_hits": 145,
+    "cache_misses": 27
+  },
+  "build_seconds": 118.3,
+  "query_seconds_mean": 1.515,
+  "tree_stats": {
+    "mean_layers": 1.91,
+    "mean_nodes": 41.9,
+    "mean_branching": 4.67
+  },
+  "simulated": true
+}

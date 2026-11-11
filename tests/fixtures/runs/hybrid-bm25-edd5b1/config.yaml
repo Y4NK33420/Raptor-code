@@ -1,0 +1,17 @@
+name: hybrid-bm25
+method: raptor
+split: dev
+n_stories: 8
+chunking:
+  strategy: sentence
+  max_tokens: 100
+clustering:
+  strategy: raptor_gmm
+  reduction_dimension: 10
+retrieval:
+  mode: collapsed
+  top_k: 10
+  max_tokens: 2000
+  hybrid: bm25+rrf
+embedding:
+  model: gemini-embedding-001

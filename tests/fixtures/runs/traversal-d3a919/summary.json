@@ -1,0 +1,40 @@
+{
+  "run_id": "traversal-d3a919",
+  "name": "traversal",
+  "created_at": "2026-11-04T16:55:00Z",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "d3a9190c4b0f",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "traversal",
+    "embedding": "gemini-embedding-001"
+  },
+  "n_questions": 71,
+  "accuracy": 0.5915,
+  "accuracy_hard": 0.3947,
+  "ci95": [
+    0.4754,
+    0.6983
+  ],
+  "layer_share": {
+    "0": 0.4,
+    "1": 0.4,
+    "2": 0.2
+  },
+  "cost": {
+    "llm_calls": 172,
+    "embed_calls": 95,
+    "cache_hits": 205,
+    "cache_misses": 15
+  },
+  "build_seconds": 89.4,
+  "query_seconds_mean": 1.474,
+  "tree_stats": {
+    "mean_layers": 2.37,
+    "mean_nodes": 38.9,
+    "mean_branching": 4.54
+  },
+  "simulated": true
+}
