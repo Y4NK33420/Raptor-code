@@ -39,6 +39,7 @@ data/
 # Run summaries and per-question results are small and committed; trees and state are not.
 artifacts/*
 !artifacts/runs/
+!artifacts/code/
 artifacts/runs/*/state.json
 .cache/
 quality_repo/
