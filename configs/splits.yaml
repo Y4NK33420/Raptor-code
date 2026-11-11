@@ -1,0 +1,25 @@
+seed: 561
+dataset: QuALITY v1.0.1 (htmlstripped)
+splits:
+  dev:
+    source: dev
+    set_ids:
+    - 60897_628POLKP
+    - 51688_J2Q3XCWR
+    - 22579_RQ3GB4A1
+    - 22346_3ZEMUJFW
+    - 59368_LBNEJQ7W
+    - 24290_VOTN7PR9
+    - 22875_539MKDEK
+    - 61430_X9N4VIUX
+  confirm:
+    source: dev
+    set_ids:
+    - 49897_D53LJ447
+    - 63616_AZTRNB8D
+    - 52845_75VB1ISR
+    - 63916_MPWP9IG6
+    - 63130_HY86PCEO
+    - 60745_RWAY1IZC
+    - 99929_7KT0XBKY
+    - 51350_MZ3KCERV

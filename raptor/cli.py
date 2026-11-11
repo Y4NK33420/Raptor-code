@@ -116,5 +116,11 @@ def migrate(
     typer.echo(f"Converted {pickle_file} ({len(tree.all_nodes)} nodes) -> {out}")
 
 
+from .eval.cli import app as eval_app  # noqa: E402
+
+app.add_typer(
+    eval_app, name="eval", help="QuALITY experiment harness (run, report, compare, list)."
+)
+
 if __name__ == "__main__":  # pragma: no cover
     app()
