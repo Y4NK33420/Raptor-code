@@ -1,0 +1,11 @@
+name: C-best-combined
+description: "Best combined settings (traversal + top-20 + gemini-embedding-2) on the confirm split."
+stage: C
+factor: combined
+split: confirm
+baseline: C-baseline
+embedding: gemini:gemini-embedding-2
+raptor:
+  retrieval:
+    mode: traversal
+    top_k: 20

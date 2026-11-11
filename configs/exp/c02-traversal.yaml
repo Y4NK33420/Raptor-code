@@ -1,0 +1,9 @@
+name: C-traversal
+description: "Traversal retrieval on the confirm split."
+stage: C
+factor: retrieval
+split: confirm
+baseline: C-baseline
+raptor:
+  retrieval:
+    mode: traversal

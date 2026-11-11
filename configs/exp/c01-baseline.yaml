@@ -1,0 +1,6 @@
+name: C-baseline
+description: "Baseline config (a00 settings) evaluated on the confirm split."
+stage: C
+factor: baseline
+split: confirm
+raptor: {}

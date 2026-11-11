@@ -1,0 +1,54 @@
+{
+  "run_id": "a-emb-bge-small-398cddec",
+  "name": "A-emb-bge-small",
+  "description": "Local BAAI/bge-small-en-v1.5 (with its query instruction) instead of Gemini embeddings.",
+  "stage": "A",
+  "factor": "embedding",
+  "baseline": "A-baseline",
+  "created_at": "2026-11-11T16:00:36+00:00",
+  "finished_at": "2026-11-11T16:13:03.300000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "e4a30c8ac9f4",
+  "tree_fingerprint": "6ef57f9f30b9",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.75,
+  "accuracy_hard": 0.6774193548,
+  "n_hard": 31,
+  "ci95": [
+    0.64223,
+    0.833712
+  ],
+  "layer_share": {
+    "0": 0.741,
+    "1": 0.246,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1069.5,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 48.1,
+  "query_seconds_mean": 9.2,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 65.2,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

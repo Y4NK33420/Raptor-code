@@ -1,0 +1,54 @@
+{
+  "run_id": "a-chunk-fixed-65e51fc2",
+  "name": "A-chunk-fixed",
+  "description": "Fixed 100-token windows, no overlap. Local bge-small embeddings.",
+  "stage": "A",
+  "factor": "chunking",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T15:40:35+00:00",
+  "finished_at": "2026-11-11T15:52:36.200000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "caf38b89124c",
+  "tree_fingerprint": "054cce0810c9",
+  "factors": {
+    "chunking": "fixed-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7368421053,
+  "accuracy_hard": 0.6774193548,
+  "n_hard": 31,
+  "ci95": [
+    0.628185,
+    0.822707
+  ],
+  "layer_share": {
+    "0": 0.754,
+    "1": 0.235,
+    "2": 0.011
+  },
+  "context_tokens_mean": 1056.24,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 44.8,
+  "query_seconds_mean": 8.9,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 64.1,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

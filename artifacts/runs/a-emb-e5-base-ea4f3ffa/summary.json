@@ -1,0 +1,54 @@
+{
+  "run_id": "a-emb-e5-base-ea4f3ffa",
+  "name": "A-emb-e5-base",
+  "description": "Local intfloat/e5-base-v2 (query:/passage: prefixes) instead of Gemini embeddings.",
+  "stage": "A",
+  "factor": "embedding",
+  "baseline": "A-baseline",
+  "created_at": "2026-11-11T16:01:04+00:00",
+  "finished_at": "2026-11-11T16:14:21.400000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "30b477441c16",
+  "tree_fingerprint": "0eab879a0bf1",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10",
+    "embedding": "e5-base-v2"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7631578947,
+  "accuracy_hard": 0.7096774194,
+  "n_hard": 31,
+  "ci95": [
+    0.656384,
+    0.844608
+  ],
+  "layer_share": {
+    "0": 0.73,
+    "1": 0.255,
+    "2": 0.015
+  },
+  "context_tokens_mean": 1073.76,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 52.6,
+  "query_seconds_mean": 9.8,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 66.4,
+    "mean_branching": 5.8,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

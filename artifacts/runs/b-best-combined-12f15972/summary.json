@@ -1,0 +1,54 @@
+{
+  "run_id": "b-best-combined-12f15972",
+  "name": "B-best-combined",
+  "description": "Best Stage-A settings combined: traversal + top-20 + gemini-embedding-2.",
+  "stage": "A",
+  "factor": "combined",
+  "baseline": "A-baseline",
+  "created_at": "2026-11-11T16:04:17+00:00",
+  "finished_at": "2026-11-11T16:23:36.300000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "10236c8f31a1",
+  "tree_fingerprint": "0303a805ce16",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "traversal-k20",
+    "embedding": "gemini-embedding-2"
+  },
+  "n_questions": 76,
+  "accuracy": 0.8421052632,
+  "accuracy_hard": 0.7741935484,
+  "n_hard": 31,
+  "ci95": [
+    0.743984,
+    0.907306
+  ],
+  "layer_share": {
+    "0": 0.512,
+    "1": 0.418,
+    "2": 0.07
+  },
+  "context_tokens_mean": 1061.42,
+  "cost": {
+    "llm_calls": 94,
+    "embed_calls": 425,
+    "cache_hits": 198,
+    "cache_misses": 505,
+    "summary_calls": 40,
+    "answer_calls": 54
+  },
+  "build_seconds": 80.1,
+  "query_seconds_mean": 14.2,
+  "tree_stats": {
+    "mean_layers": 2.125,
+    "mean_nodes": 70.5,
+    "mean_branching": 6.0,
+    "mean_leaves": 58.6,
+    "mean_compression": 0.213
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

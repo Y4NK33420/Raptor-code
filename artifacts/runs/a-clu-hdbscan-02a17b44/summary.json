@@ -1,0 +1,54 @@
+{
+  "run_id": "a-clu-hdbscan-02a17b44",
+  "name": "A-clu-hdbscan",
+  "description": "UMAP to 10 dims + HDBSCAN (min cluster 3); noise joins the nearest cluster. Local bge-small.",
+  "stage": "A",
+  "factor": "clustering",
+  "baseline": "A-emb-bge-small",
+  "created_at": "2026-11-11T15:18:44+00:00",
+  "finished_at": "2026-11-11T15:31:12.800000+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "72e92e1efd22",
+  "tree_fingerprint": "bfdfaae6dbc0",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "hdbscan",
+    "retrieval": "collapsed-k10",
+    "embedding": "bge-small-en-v1.5"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7631578947,
+  "accuracy_hard": 0.7096774194,
+  "n_hard": 31,
+  "ci95": [
+    0.656384,
+    0.844608
+  ],
+  "layer_share": {
+    "0": 0.731,
+    "1": 0.256,
+    "2": 0.013
+  },
+  "context_tokens_mean": 1065.09,
+  "cost": {
+    "llm_calls": 78,
+    "embed_calls": 0,
+    "cache_hits": 215,
+    "cache_misses": 310,
+    "summary_calls": 36,
+    "answer_calls": 42
+  },
+  "build_seconds": 49.6,
+  "query_seconds_mean": 9.2,
+  "tree_stats": {
+    "mean_layers": 2.0,
+    "mean_nodes": 65.2,
+    "mean_branching": 5.6,
+    "mean_leaves": 56.0,
+    "mean_compression": 0.204
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}
