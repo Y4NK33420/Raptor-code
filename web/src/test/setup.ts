@@ -16,3 +16,7 @@ window.matchMedia ??= ((q: string) => ({
   removeEventListener() {},
   dispatchEvent: () => false,
 })) as unknown as typeof window.matchMedia
+
+import { cleanup } from '@testing-library/react'
+import { afterEach } from 'vitest'
+afterEach(cleanup)
