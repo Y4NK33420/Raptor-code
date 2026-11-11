@@ -45,6 +45,13 @@ def is_rate_limit(exc: BaseException) -> bool:
     return code == 429 or "resource_exhausted" in text or "429" in text
 
 
+def is_auth_error(exc: BaseException) -> bool:
+    """The key itself is bad (invalid, revoked, or not allowed to use the API)."""
+    code = getattr(exc, "code", None)
+    text = str(exc).lower()
+    return code in (401, 403) or "api key not valid" in text or "api_key_invalid" in text
+
+
 def is_retryable(exc: BaseException) -> bool:
     if is_rate_limit(exc):
         return True
@@ -66,6 +73,7 @@ class KeySlot:
     client: Any
     limiters: dict[str, RateLimiter] = field(default_factory=dict)
     cooldown_until: dict[str, float] = field(default_factory=dict)
+    disabled: bool = False  # set when the key is rejected as invalid
 
 
 class KeyPool:
@@ -95,6 +103,8 @@ class KeyPool:
                 n = len(self.slots)
                 for step in range(n):
                     slot = self.slots[(self._cursor + step) % n]
+                    if slot.disabled:
+                        continue
                     cool = slot.cooldown_until.get(bucket, 0.0) - now
                     if cool > 0:
                         waits.append(cool)
@@ -105,6 +115,8 @@ class KeyPool:
                         self.calls_per_key[slot.index] += 1
                         return slot
                     waits.append(wait)
+                if not waits:
+                    raise RuntimeError("every Gemini API key was rejected as invalid")
             time.sleep(max(min(waits), 0.01))
 
     def cooldown(self, slot: KeySlot, bucket: str, seconds: float) -> None:
@@ -115,7 +127,8 @@ class KeyPool:
         now = time.monotonic()
         with self._lock:
             return all(
-                s.cooldown_until.get(bucket, 0.0) - now > RATE_LIMIT_COOLDOWN for s in self.slots
+                s.disabled or s.cooldown_until.get(bucket, 0.0) - now > RATE_LIMIT_COOLDOWN
+                for s in self.slots
             )
 
     def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T]) -> T:
@@ -126,6 +139,15 @@ class KeyPool:
             try:
                 return fn(slot.client)
             except Exception as exc:
+                if is_auth_error(exc) and any(not s.disabled for s in self.slots if s is not slot):
+                    logger.warning(
+                        "Gemini key #%d was rejected (%s); disabling it for this process",
+                        slot.index + 1,
+                        str(exc)[:80],
+                    )
+                    with self._lock:
+                        slot.disabled = True
+                    continue
                 if not is_retryable(exc) or attempt == attempts - 1:
                     raise
                 if is_rate_limit(exc):

@@ -102,12 +102,23 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
         )
 
     def _embed_batch(self, texts: list[str], task_type: str | None) -> list[list[float]]:
+        from google.genai import types
+
         config = self._config(task_type)
+        # One Content per text: newer models (gemini-embedding-2) would otherwise merge a list
+        # of strings into a single multi-part input and return one vector.
+        contents = [types.Content(parts=[types.Part(text=t)]) for t in texts]
         resp = self._pool.call(
             self._bucket,
             self._rpm,
-            lambda c: c.models.embed_content(model=self.model_name, contents=texts, config=config),
+            lambda c: c.models.embed_content(
+                model=self.model_name, contents=contents, config=config
+            ),
         )
+        if len(resp.embeddings) != len(texts):
+            raise RuntimeError(
+                f"{self.model_name} returned {len(resp.embeddings)} embeddings for {len(texts)} texts"
+            )
         return [list(e.values) for e in resp.embeddings]
 
     def _embed(self, texts: Sequence[str], task_type: str | None) -> np.ndarray:

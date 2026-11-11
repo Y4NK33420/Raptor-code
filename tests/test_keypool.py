@@ -71,3 +71,37 @@ def test_settings_collects_numbered_keys(tmp_path, monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY2", "a")  # duplicates are dropped
     assert settings.gemini_keys(env_file=env) == ["a", "c", "j"]
     assert Settings(_env_file=None).gemini_keys(env_file=None) == ["a", "j"]
+
+
+def test_invalid_key_is_disabled_and_skipped():
+    p = pool(3)
+
+    def fn(client):
+        if client == "k0":
+            raise FakeAPIError(401, "API key not valid. Please pass a valid API key.")
+        return client
+
+    assert p.call("llm:x", None, fn) == "k1"
+    assert p.slots[0].disabled
+    assert {p.call("embed:y", None, fn) for _ in range(4)} == {"k1", "k2"}
+
+
+def test_all_invalid_keys_raise():
+    p = pool(1)
+    with pytest.raises(FakeAPIError):
+        p.call("llm:x", None, lambda c: (_ for _ in ()).throw(FakeAPIError(401, "bad key")))
+
+
+def test_daily_quota_fail_fast(monkeypatch):
+    from raptor.models import keypool
+
+    monkeypatch.setattr(keypool, "FAIL_ON_DAILY_QUOTA", True)
+    p = pool(2)
+
+    def fn(client):
+        raise FakeAPIError(
+            429, "RESOURCE_EXHAUSTED quotaId: GenerateRequestsPerDayPerProjectPerModel"
+        )
+
+    with pytest.raises(keypool.QuotaExhaustedError):
+        p.call("llm:x", None, fn)
