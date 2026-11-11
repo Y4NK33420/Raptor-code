@@ -1,0 +1,28 @@
+models:
+  # Use local sentence-transformers for embeddings (no Gemini quota)
+  embedding_provider: local
+  embedding_model: bge-small
+  # Still use Gemini flash-lite for summarization (fast, free tier)
+  provider: gemini
+  llm_model: gemini-3.5-flash-lite
+  # task types not applicable to local embeddings
+  query_task_type: null
+  document_task_type: null
+  embed_batch_size: 40
+
+summary:
+  depth: file          # skip per-symbol summaries → fewer Gemini calls
+  length: 120
+  max_workers: 2       # keep memory low
+
+concepts:
+  enabled: true
+  min_members: 2
+  min_nodes: 6
+
+retrieval:
+  dense: true
+  bm25: true
+  graph_expansion: true
+  descend: true
+  routing: true

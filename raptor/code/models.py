@@ -55,9 +55,10 @@ def build_embedding_model(cfg: CodeModelsConfig) -> BaseEmbeddingModel:
             batch_size=cfg.embed_batch_size,
         )
     if provider == "local":
-        from ..models.local import SBertEmbeddingModel
+        from ..models.local import SBertEmbeddingModel, resolve_local_embedding
 
-        return SBertEmbeddingModel(cfg.embedding_model)
+        hub_id, q_prefix, d_prefix = resolve_local_embedding(cfg.embedding_model)
+        return SBertEmbeddingModel(hub_id, query_prefix=q_prefix, document_prefix=d_prefix)
     from ..models.ollama import OllamaEmbeddingModel
 
     return OllamaEmbeddingModel(cfg.embedding_model)
