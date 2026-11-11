@@ -15,19 +15,22 @@ class RateLimiter:
         self._times: deque[float] = deque()
         self._lock = threading.Lock()
 
-    def acquire(self) -> None:
+    def try_acquire(self) -> float:
+        """Take a slot if one is free. Returns 0.0 on success, else seconds until one frees up."""
         if self.rpm is None:
-            return
-        while True:
-            with self._lock:
-                now = time.monotonic()
-                while self._times and now - self._times[0] >= 60.0:
-                    self._times.popleft()
-                if len(self._times) < self.rpm:
-                    self._times.append(now)
-                    return
-                wait = 60.0 - (now - self._times[0])
-            time.sleep(max(wait, 0.01))
+            return 0.0
+        with self._lock:
+            now = time.monotonic()
+            while self._times and now - self._times[0] >= 60.0:
+                self._times.popleft()
+            if len(self._times) < self.rpm:
+                self._times.append(now)
+                return 0.0
+            return max(60.0 - (now - self._times[0]), 0.01)
+
+    def acquire(self) -> None:
+        while (wait := self.try_acquire()) > 0:
+            time.sleep(wait)
 
 
 _SHARED: dict[str, RateLimiter] = {}

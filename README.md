@@ -39,6 +39,10 @@ Put your Gemini key in a `.env` file (gitignored):
 cp .env.example .env    # then set GEMINI_API_KEY=...
 ```
 
+Extra keys (`GEMINI_API_KEY2`, `GEMINI_API_KEY3`, ...) are used round-robin, with
+failover when a key is rate-limited. Quotas are per Google Cloud project, so extra keys
+only add capacity if they come from different projects.
+
 ## Quickstart
 
 ```python

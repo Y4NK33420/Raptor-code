@@ -2,7 +2,8 @@
 
 * Embeddings are batched (up to 100 texts per request) and use retrieval task types
   (``RETRIEVAL_DOCUMENT`` for stored text, ``RETRIEVAL_QUERY`` for queries).
-* All calls go through a shared per-process rate limiter and retry on 429/5xx.
+* Calls are spread over every configured key (``GEMINI_API_KEY``, ``GEMINI_API_KEY2``, ...)
+  with per-key rate limits, failover on 429 and retries on 5xx (see :mod:`.keypool`).
 """
 
 from __future__ import annotations
@@ -12,17 +13,10 @@ from collections.abc import Iterator, Sequence
 from typing import Any
 
 import numpy as np
-from tenacity import (
-    before_sleep_log,
-    retry,
-    retry_if_exception,
-    stop_after_attempt,
-    wait_random_exponential,
-)
 
 from ..settings import get_settings
 from .base import BaseEmbeddingModel, BaseQAModel, BaseSummarizationModel
-from .ratelimit import shared_limiter
+from .keypool import KeyPool, shared_pool
 
 logger = logging.getLogger(__name__)
 
@@ -42,35 +36,21 @@ QA_PROMPT = (
 )
 
 
-def _client(api_key: str | None):
+def _make_client(api_key: str) -> Any:
     try:
         from google import genai
     except ImportError as exc:  # pragma: no cover - depends on extras
         raise ImportError("Gemini support needs `pip install raptor-code[gemini]`") from exc
-    return genai.Client(api_key=api_key or get_settings().require_gemini_key())
+    return genai.Client(api_key=api_key)
+
+
+def _pool(api_key: str | None) -> KeyPool:
+    keys = [api_key] if api_key else get_settings().require_gemini_keys()
+    return shared_pool(keys, _make_client)
 
 
 def _strip_prefix(name: str) -> str:
     return name.removeprefix("models/")
-
-
-def _is_retryable(exc: BaseException) -> bool:
-    code = getattr(exc, "code", None)
-    if isinstance(code, int) and (code == 429 or code >= 500):
-        return True
-    text = str(exc).lower()
-    return (
-        "resource_exhausted" in text or "429" in text or "unavailable" in text or "deadline" in text
-    )
-
-
-_retry = retry(
-    retry=retry_if_exception(_is_retryable),
-    wait=wait_random_exponential(multiplier=2, min=2, max=60),
-    stop=stop_after_attempt(8),
-    before_sleep=before_sleep_log(logger, logging.WARNING),
-    reraise=True,
-)
 
 
 def _safety_settings() -> list[Any]:
@@ -106,11 +86,9 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
         self.query_task_type = query_task_type
         self.output_dimensionality = output_dimensionality
         self.batch_size = max(1, min(batch_size, EMBED_BATCH_LIMIT))
-        self._client = _client(api_key)
-        self._limiter = shared_limiter(
-            f"gemini-embed:{self.model_name}",
-            rpm if rpm is not None else get_settings().gemini_embed_rpm,
-        )
+        self._pool = _pool(api_key)
+        self._bucket = f"embed:{self.model_name}"
+        self._rpm = rpm if rpm is not None else get_settings().gemini_embed_rpm
         self.model_id = (
             f"gemini:{self.model_name}:doc={document_task_type}:q={query_task_type}"
             f":dim={output_dimensionality}"
@@ -123,11 +101,12 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
             task_type=task_type, output_dimensionality=self.output_dimensionality
         )
 
-    @_retry
     def _embed_batch(self, texts: list[str], task_type: str | None) -> list[list[float]]:
-        self._limiter.acquire()
-        resp = self._client.models.embed_content(
-            model=self.model_name, contents=texts, config=self._config(task_type)
+        config = self._config(task_type)
+        resp = self._pool.call(
+            self._bucket,
+            self._rpm,
+            lambda c: c.models.embed_content(model=self.model_name, contents=texts, config=config),
         )
         return [list(e.values) for e in resp.embeddings]
 
@@ -148,20 +127,18 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
 class _GeminiLLM:
     def __init__(self, model_name: str, api_key: str | None, rpm: int | None) -> None:
         self.model_name = _strip_prefix(model_name)
-        self._client = _client(api_key)
-        self._limiter = shared_limiter(
-            f"gemini-llm:{self.model_name}", rpm if rpm is not None else get_settings().gemini_rpm
-        )
+        self._pool = _pool(api_key)
+        self._bucket = f"llm:{self.model_name}"
+        self._rpm = rpm if rpm is not None else get_settings().gemini_rpm
 
-    @_retry
     def _generate(self, prompt: str, **config: Any):
         from google.genai import types
 
-        self._limiter.acquire()
-        return self._client.models.generate_content(
-            model=self.model_name,
-            contents=prompt,
-            config=types.GenerateContentConfig(safety_settings=_safety_settings(), **config),
+        cfg = types.GenerateContentConfig(safety_settings=_safety_settings(), **config)
+        return self._pool.call(
+            self._bucket,
+            self._rpm,
+            lambda c: c.models.generate_content(model=self.model_name, contents=prompt, config=cfg),
         )
 
     @staticmethod
@@ -230,18 +207,30 @@ class GeminiQAModel(BaseQAModel, _GeminiLLM):
     def stream_answer(self, context: str, question: str) -> Iterator[str]:
         from google.genai import types
 
-        self._limiter.acquire()
-        stream = self._client.models.generate_content_stream(
-            model=self.model_name,
-            contents=self.prompt_template.format(context=context, question=question),
-            config=types.GenerateContentConfig(
-                temperature=self.temperature, safety_settings=_safety_settings()
-            ),
+        prompt = self.prompt_template.format(context=context, question=question)
+        cfg = types.GenerateContentConfig(
+            temperature=self.temperature, safety_settings=_safety_settings()
         )
-        for chunk in stream:
-            text = self._text(chunk)
-            if text:
+
+        def start(client: Any):
+            # Errors surface on the first chunk, so pull it inside the retried call.
+            it = iter(
+                client.models.generate_content_stream(
+                    model=self.model_name, contents=prompt, config=cfg
+                )
+            )
+            return next(it, None), it
+
+        first, rest = self._pool.call(self._bucket, self._rpm, start)
+        for chunk in _chain(first, rest):
+            if self._text(chunk):
                 yield chunk.text
+
+
+def _chain(first: Any, rest: Iterator[Any]) -> Iterator[Any]:
+    if first is not None:
+        yield first
+    yield from rest
 
 
 def hash_text(text: str) -> str:
