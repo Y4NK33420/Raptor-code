@@ -195,3 +195,8 @@
   background: var(--accent-soft);
   box-shadow: inset 3px 0 0 var(--accent);
 }
+.code-view .shiki code {
+  display: flex;
+  flex-direction: column;
+  min-width: max-content;
+}

@@ -22,6 +22,7 @@ export interface LayoutOptions {
   nodeWidth?: number
   gapX?: number
   rowHeight?: number
+  maxPerRow?: number
 }
 
 export function layoutTree(nodes: LayoutInput[], opts: LayoutOptions = {}): Map<number, Positioned> {
@@ -54,21 +55,28 @@ export function layoutTree(nodes: LayoutInput[], opts: LayoutOptions = {}): Map<
       keyed.map((k) => k.n),
     )
   }
-  const widest = Math.max(...[...byLayer.values()].map((r) => r.length), 1)
+  // Wide layers wrap into stacked sub-rows so a 100-leaf tree is not a single hairline.
+  const maxPerRow = opts.maxPerRow ?? 8
+  const widest = Math.min(Math.max(...[...byLayer.values()].map((r) => r.length), 1), maxPerRow)
   const span = widest * (nodeWidth + gapX)
-  const top = layers[0] ?? 0
   const out = new Map<number, Positioned>()
+  let y = 0
   for (const layer of layers) {
     const row = byLayer.get(layer)!
-    const step = span / row.length
+    const subRows = Math.ceil(row.length / maxPerRow)
+    const perRow = Math.ceil(row.length / subRows)
     row.forEach((n, i) => {
+      const r = Math.floor(i / perRow)
+      const inRow = Math.min(perRow, row.length - r * perRow)
+      const step = span / inRow
       out.set(n.id, {
         id: n.id,
         layer,
-        x: Math.round(i * step + (step - nodeWidth) / 2),
-        y: (top - layer) * rowHeight,
+        x: Math.round((i - r * perRow) * step + (step - nodeWidth) / 2),
+        y: y + r * rowHeight * 0.62,
       })
     })
+    y += (subRows - 1) * rowHeight * 0.62 + rowHeight
   }
   return out
 }
