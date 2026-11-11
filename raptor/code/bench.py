@@ -211,7 +211,8 @@ class LineWindowIndex:
             for r, (i, _) in enumerate(self._bm25.top(tokenize(query), k * 2)):
                 fused[i] = fused.get(i, 0.0) + 1 / (60 + r + 1)
         order = sorted(fused, key=lambda i: (-fused[i], i))[:k]
-        files, funcs = [], []
+        files: list[str] = []
+        funcs: list[str] = []
         for i in order:
             path, a, b = self.windows[i]
             files.append(path)
@@ -238,7 +239,7 @@ def judge_answer(
     out: dict[str, Any] = {"raw": raw}
     for key in ("correctness", "completeness", "grounding"):
         try:
-            out[key] = float(data.get(key))
+            out[key] = float(data.get(key))  # type: ignore[arg-type]
         except (TypeError, ValueError):
             out[key] = float("nan")
     out["comment"] = data.get("comment", "")
