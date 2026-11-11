@@ -89,6 +89,9 @@ class CodeModelsConfig(ModelsConfig):
     #: Override the provider / model used for summaries only (e.g. "ollama").
     summary_provider: Literal["gemini", "ollama"] | None = None
     summary_model: str | None = None
+    #: Texts per embedding request. Code chunks are long, so smaller batches stay under
+    #: free-tier tokens-per-minute limits.
+    embed_batch_size: int = Field(40, ge=1, le=100)
 
 
 class CodeConfig(_Section):

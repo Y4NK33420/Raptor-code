@@ -52,6 +52,7 @@ def build_embedding_model(cfg: CodeModelsConfig) -> BaseEmbeddingModel:
             cfg.embedding_model,
             document_task_type=cfg.document_task_type if task else None,
             query_task_type=cfg.query_task_type if task else None,
+            batch_size=cfg.embed_batch_size,
         )
     if provider == "local":
         from ..models.local import SBertEmbeddingModel
