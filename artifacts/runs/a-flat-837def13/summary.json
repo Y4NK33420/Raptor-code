@@ -1,0 +1,51 @@
+{
+  "run_id": "a-flat-837def13",
+  "name": "A-flat",
+  "description": "Flat RAG baseline: the same leaf chunks, dense top-10, no summary layers.",
+  "stage": "A",
+  "factor": "method",
+  "baseline": "A-baseline",
+  "created_at": "2026-11-11T14:33:02+00:00",
+  "finished_at": "2026-11-11T14:40:13+00:00",
+  "split": "dev",
+  "method": "flat",
+  "config_fingerprint": "465850b7e850",
+  "tree_fingerprint": "leaves-9a2b0da1f79e",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "none",
+    "retrieval": "flat-k10",
+    "embedding": "gemini-embedding-001"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7631578947368421,
+  "accuracy_hard": 0.7419354838709677,
+  "n_hard": 31,
+  "ci95": [
+    0.6578947368421053,
+    0.8552631578947368
+  ],
+  "layer_share": {
+    "0": 1.0
+  },
+  "context_tokens_mean": 1033.407894736842,
+  "cost": {
+    "llm_calls": 73,
+    "embed_calls": 0,
+    "cache_hits": 550,
+    "cache_misses": 73,
+    "summary_calls": 0,
+    "answer_calls": 73
+  },
+  "build_seconds": 0.01947393748559989,
+  "query_seconds_mean": 11.366934210526313,
+  "tree_stats": {
+    "mean_layers": 1.0,
+    "mean_nodes": 58.625,
+    "mean_branching": 0.0,
+    "mean_leaves": 58.625
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}

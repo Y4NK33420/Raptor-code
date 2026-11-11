@@ -1,0 +1,54 @@
+{
+  "run_id": "a-hybrid-b08aedf8",
+  "name": "A-hybrid",
+  "description": "Hybrid retrieval: dense + BM25 fused with RRF (k=60).",
+  "stage": "A",
+  "factor": "retrieval",
+  "baseline": "A-baseline",
+  "created_at": "2026-11-11T14:50:11+00:00",
+  "finished_at": "2026-11-11T14:53:39+00:00",
+  "split": "dev",
+  "method": "raptor",
+  "config_fingerprint": "05962818af3d",
+  "tree_fingerprint": "6fbfb7b9ba56",
+  "factors": {
+    "chunking": "sentence-100",
+    "clustering": "raptor_gmm",
+    "retrieval": "collapsed-k10+bm25",
+    "embedding": "gemini-embedding-001"
+  },
+  "n_questions": 76,
+  "accuracy": 0.7105263157894737,
+  "accuracy_hard": 0.5483870967741935,
+  "n_hard": 31,
+  "ci95": [
+    0.6052631578947368,
+    0.8026315789473685
+  ],
+  "layer_share": {
+    "0": 0.7,
+    "1": 0.28289473684210525,
+    "2": 0.017105263157894738
+  },
+  "context_tokens_mean": 1066.4868421052631,
+  "cost": {
+    "llm_calls": 75,
+    "embed_calls": 0,
+    "cache_hits": 77,
+    "cache_misses": 75,
+    "summary_calls": 0,
+    "answer_calls": 75
+  },
+  "build_seconds": 55.76364608746371,
+  "query_seconds_mean": 7.258961842105262,
+  "tree_stats": {
+    "mean_layers": 2.125,
+    "mean_nodes": 68.625,
+    "mean_branching": 5.9949292027417025,
+    "mean_leaves": 58.625,
+    "mean_compression": 0.2136478266031656
+  },
+  "n_stories": 8,
+  "reader_model": "gemini-3.5-flash-lite",
+  "prompt_version": "mcq-v1"
+}
