@@ -85,10 +85,11 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
         self.document_task_type = document_task_type
         self.query_task_type = query_task_type
         self.output_dimensionality = output_dimensionality
-        self.batch_size = max(1, min(batch_size, EMBED_BATCH_LIMIT))
         self._pool = _pool(api_key)
         self._bucket = f"embed:{self.model_name}"
         self._rpm = rpm if rpm is not None else get_settings().gemini_embed_rpm
+        # Every text counts against the per-minute quota, so a batch never exceeds it.
+        self.batch_size = max(1, min(batch_size, EMBED_BATCH_LIMIT, self._rpm or EMBED_BATCH_LIMIT))
         self.model_id = (
             f"gemini:{self.model_name}:doc={document_task_type}:q={query_task_type}"
             f":dim={output_dimensionality}"
@@ -114,6 +115,7 @@ class GeminiEmbeddingModel(BaseEmbeddingModel):
             lambda c: c.models.embed_content(
                 model=self.model_name, contents=contents, config=config
             ),
+            cost=len(texts),
         )
         if len(resp.embeddings) != len(texts):
             raise RuntimeError(

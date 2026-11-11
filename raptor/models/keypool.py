@@ -94,7 +94,7 @@ class KeyPool:
             lim = slot.limiters[bucket] = RateLimiter(rpm)
         return lim
 
-    def acquire(self, bucket: str, rpm: int | None) -> KeySlot:
+    def acquire(self, bucket: str, rpm: int | None, cost: int = 1) -> KeySlot:
         """Block until some key has budget for ``bucket``; return that key's slot."""
         while True:
             with self._lock:
@@ -109,7 +109,7 @@ class KeyPool:
                     if cool > 0:
                         waits.append(cool)
                         continue
-                    wait = self._limiter(slot, bucket, rpm).try_acquire()
+                    wait = self._limiter(slot, bucket, rpm).try_acquire(cost)
                     if wait == 0.0:
                         self._cursor = (slot.index + 1) % n
                         self.calls_per_key[slot.index] += 1
@@ -131,11 +131,15 @@ class KeyPool:
                 for s in self.slots
             )
 
-    def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T]) -> T:
-        """Run ``fn(client)`` on an available key, failing over and retrying as needed."""
+    def call(self, bucket: str, rpm: int | None, fn: Callable[[Any], T], *, cost: int = 1) -> T:
+        """Run ``fn(client)`` on an available key, failing over and retrying as needed.
+
+        ``cost`` is how many requests the call counts as against ``rpm`` (Gemini's free
+        tier counts every text in a batch embedding call as one request).
+        """
         attempts = MAX_ATTEMPTS + len(self.slots)
         for attempt in range(attempts):
-            slot = self.acquire(bucket, rpm)
+            slot = self.acquire(bucket, rpm, cost)
             try:
                 return fn(slot.client)
             except Exception as exc:
