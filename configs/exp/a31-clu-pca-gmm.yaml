@@ -1,0 +1,10 @@
+name: A-clu-pca-gmm
+description: PCA to 10 dims, then one level of soft GMM. Local bge-small embeddings
+  (vs the A-emb-bge-small baseline).
+stage: A
+factor: clustering
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  clustering:
+    strategy: pca_gmm

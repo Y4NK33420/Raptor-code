@@ -1,0 +1,11 @@
+name: A-chunk-sentence250
+description: Sentence chunks of 250 tokens (top-10 then fills more of the 3500-token
+  budget). Local bge-small embeddings (vs the A-emb-bge-small baseline).
+stage: A
+factor: chunking
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  chunking:
+    strategy: sentence
+    max_tokens: 250

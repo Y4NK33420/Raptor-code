@@ -1,0 +1,8 @@
+name: A-hybrid
+description: 'Hybrid retrieval: dense + BM25 fused with RRF (k=60).'
+stage: A
+factor: retrieval
+baseline: A-baseline
+raptor:
+  retrieval:
+    hybrid: true

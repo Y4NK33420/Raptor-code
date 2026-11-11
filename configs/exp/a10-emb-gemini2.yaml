@@ -1,0 +1,7 @@
+name: A-emb-gemini2
+description: gemini-embedding-2 for leaves, summaries and queries (tree rebuilt).
+stage: A
+factor: embedding
+baseline: A-baseline
+embedding: gemini:gemini-embedding-2
+raptor: {}

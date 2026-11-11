@@ -1,0 +1,10 @@
+name: A-clu-contiguous
+description: 'Contiguous segmentation: runs of about 5 adjacent nodes, cut at the
+  least similar neighbours. Local bge-small embeddings (vs the A-emb-bge-small baseline).'
+stage: A
+factor: clustering
+baseline: A-emb-bge-small
+embedding: local:bge-small
+raptor:
+  clustering:
+    strategy: contiguous

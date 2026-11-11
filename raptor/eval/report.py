@@ -92,10 +92,10 @@ def stage_rows(runs: list[dict[str, Any]], root: Path) -> list[dict[str, Any]]:
 
 def _table(rows: list[dict[str, Any]]) -> str:
     head = (
-        "| Run | Varies | Setting | Acc % | 95% CI | Hard acc % | Δ vs base (pts) [95% CI] "
+        "| Run | Varies | Setting | vs | Acc % | 95% CI | Hard acc % | Δ vs base (pts) [95% CI] "
         "| McNemar p | fixed / broken | Summary-node share % | LLM calls | Build s/story "
         "| Nodes/tree | Verdict |\n"
-        "|---|---|---|---:|---|---:|---|---:|---|---:|---:|---:|---:|---|\n"
+        "|---|---|---|---|---:|---|---:|---|---:|---|---:|---:|---:|---:|---|\n"
     )
     lines = []
     for row in rows:
@@ -109,7 +109,8 @@ def _table(rows: list[dict[str, Any]]) -> str:
         else:
             delta, p, fb = "-", "-", "-"
         lines.append(
-            f"| `{r['name']}` | {r.get('factor') or '-'} | {_setting(r)} | {_pct(r['accuracy'])} "
+            f"| `{r['name']}` | {r.get('factor') or '-'} | {_setting(r)} "
+            f"| {('`' + row['base']['name'] + '`') if row['base'] else '-'} | {_pct(r['accuracy'])} "
             f"| {_pct(lo)}–{_pct(hi)} | {_pct(r.get('accuracy_hard'))} | {delta} | {p} | {fb} "
             f"| {_pct(_summary_share(r), 0)} | {r['cost'].get('llm_calls', 0)} "
             f"| {r.get('build_seconds', 0):.0f} | {r['tree_stats'].get('mean_nodes', 0):.0f} "
@@ -159,8 +160,9 @@ def _forest(rows: list[dict[str, Any]], path: Path, title: str) -> None:
                 [100 * dlo, 100 * dhi], [y, y], color=dcol, linewidth=2, solid_capstyle="round"
             )
             ax2.plot(100 * c["delta"], y, "o", color=dcol, markersize=8, markeredgecolor=SURFACE)
-    bases = [row["run"]["accuracy"] for row in rows if row["cmp"] is None]
-    for b in bases:
+    bases = {row["run"]["run_id"]: row["run"]["accuracy"] for row in rows if row["cmp"] is None}
+    bases.update({row["base"]["run_id"]: row["base"]["accuracy"] for row in rows if row["base"]})
+    for b in bases.values():
         ax1.axvline(100 * b, color=INK_2, linewidth=1, linestyle=(0, (3, 3)))
     ax2.axvline(0, color=INK_2, linewidth=1)
     ax1.set_yticks(ys, labels, color=INK, fontsize=9)
@@ -172,7 +174,7 @@ def _forest(rows: list[dict[str, Any]], path: Path, title: str) -> None:
     fig.text(
         0.01,
         0.005,
-        "Grey = baseline. Right panel: green/orange = McNemar p < 0.05 better/worse; blue = within noise.",
+        "Grey = baseline; dashed lines = baseline accuracies. Right panel: green/orange = McNemar p < 0.05 better/worse; blue = within noise.",
         color=INK_2,
         fontsize=8,
     )

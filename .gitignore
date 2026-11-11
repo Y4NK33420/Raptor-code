@@ -36,7 +36,10 @@ assertion.log
 .venv*/
 .venv*
 data/
-artifacts/
+# Run summaries and per-question results are small and committed; trees and state are not.
+artifacts/*
+!artifacts/runs/
+artifacts/runs/*/state.json
 .cache/
 quality_repo/
 *.pdf

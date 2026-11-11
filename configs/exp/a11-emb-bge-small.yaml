@@ -1,0 +1,8 @@
+name: A-emb-bge-small
+description: Local BAAI/bge-small-en-v1.5 (with its query instruction) instead of
+  Gemini embeddings.
+stage: A
+factor: embedding
+baseline: A-baseline
+embedding: local:bge-small
+raptor: {}

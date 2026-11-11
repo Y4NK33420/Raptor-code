@@ -1,0 +1,7 @@
+name: A-topk5
+description: Collapsed tree, top-5 nodes.
+stage: A
+factor: retrieval
+baseline: A-baseline
+top_k: 5
+raptor: {}

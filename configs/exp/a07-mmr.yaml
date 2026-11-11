@@ -1,0 +1,8 @@
+name: A-mmr
+description: MMR (lambda=0.5) over the dense top-50 for diversity.
+stage: A
+factor: retrieval
+baseline: A-baseline
+raptor:
+  retrieval:
+    mmr_lambda: 0.5
